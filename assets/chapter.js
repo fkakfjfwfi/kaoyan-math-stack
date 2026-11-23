@@ -78,15 +78,15 @@
         '</div>'
       : "";
 
-    // 本章对应的 18 讲精讲（lecture-data 提供）
+    // 本章对应的系统精讲讲次（lecture-data 提供）
     var lectures = (window.MATH_LECTURES || []).filter(function (l) {
       return (l.chapters || []).indexOf(c.id) >= 0;
     });
     var lectureHtml = lectures.length
-      ? '<h2 class="sec" id="lectures">系统精讲 <span class="en">18 LECTURES</span></h2>' +
+      ? '<h2 class="sec" id="lectures">系统精讲 <span class="en">LECTURES</span></h2>' +
         '<div class="callout exam">' +
           '<div class="co-title">📖 本章只是速览；要补到 120 分，按讲次学深</div>' +
-          '<p>对应讲义把概念、方法卡和例题讲透，每讲含 6～8 个题型方法与 4～7 道精讲例题。</p>' +
+          '<p>对应讲义把概念、方法卡和例题讲透，每讲含 5～9 个题型方法与 4～11 道精讲例题。</p>' +
           '<p style="margin-bottom:0">' + lectures.map(function (l) {
             return '<a class="btn sm" style="margin:3px 6px 3px 0" href="lecture.html?l=' + l.id + '">第 ' + l.no + ' 讲 ' + l.title + ' →</a>';
           }).join("") + '</p>' +

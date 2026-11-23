@@ -50,6 +50,8 @@ vm.createContext(ctx);
   "assets/lectures/l10-l12.js",
   "assets/lectures/l13-l15.js",
   "assets/lectures/l16-l18.js",
+  "assets/lectures/pl01-pl03.js",
+  "assets/lectures/pl04-pl06.js",
   "assets/solution-data.js",
   "assets/solution-why.js"
 ].forEach((f) => load(f, ctx));
@@ -160,12 +162,16 @@ notes.push(`底层逻辑 ${Object.keys(reasoning).length} 章；题解 why ${why
 
 /* ── 高数 18 讲精讲 ── */
 const lectureIds = new Set();
-lectures.forEach((l, i) => {
-  const where = `第 ${i + 1} 讲（${l.id || "无 id"}）`;
-  if (!/^l\d+$/.test(l.id || "")) fail(`${where} id 非法`);
+const lectureNo = {};
+lectures.forEach((l) => {
+  const where = `第 ${l.no} 讲（${l.id || "无 id"}）`;
+  if (!/^p?l\d+$/.test(l.id || "")) fail(`${where} id 非法`);
   if (lectureIds.has(l.id)) fail(`${where} id 重复`);
   lectureIds.add(l.id);
-  if (l.no !== i + 1) fail(`${where} 讲次应为 ${i + 1}，实际 ${l.no}`);
+  const subject = l.subject || "gaoshu";
+  if (!["gaoshu", "prob"].includes(subject)) fail(`${where} subject 非法：${subject}`);
+  lectureNo[subject] = (lectureNo[subject] || 0) + 1;
+  if (l.no !== lectureNo[subject]) fail(`${where} 在 ${subject} 内讲次应为 ${lectureNo[subject]}，实际 ${l.no}`);
   ["part", "title", "intro"].forEach((k) => {
     if (!l[k]) fail(`${where} 缺少 ${k}`);
   });
@@ -200,8 +206,12 @@ lectures.forEach((l, i) => {
   if (!Array.isArray(l.pitfalls) || l.pitfalls.length < 4) fail(`${where} 避坑少于 4 条`);
   if (!Array.isArray(l.selfCheck) || l.selfCheck.length < 4) fail(`${where} 自测少于 4 条`);
 });
-if (lectures.length !== 18) fail(`高数精讲应为 18 讲，实际 ${lectures.length}`);
-notes.push(`高数精讲 ${lectures.length} 讲，${lectures.reduce((n, l) => n + (l.methods || []).length, 0)} 个方法卡，${lectures.reduce((n, l) => n + (l.examples || []).length, 0)} 道例题`);
+const gaoshuLectures = lectures.filter((l) => (l.subject || "gaoshu") === "gaoshu");
+const probLectures = lectures.filter((l) => (l.subject || "gaoshu") === "prob");
+if (gaoshuLectures.length !== 18) fail(`高数精讲应为 18 讲，实际 ${gaoshuLectures.length}`);
+if (probLectures.length !== 6) fail(`概率精讲应为 6 讲，实际 ${probLectures.length}`);
+notes.push(`高数精讲 ${gaoshuLectures.length} 讲，${gaoshuLectures.reduce((n, l) => n + (l.methods || []).length, 0)} 个方法卡，${gaoshuLectures.reduce((n, l) => n + (l.examples || []).length, 0)} 道例题`);
+notes.push(`概率精讲 ${probLectures.length} 讲，${probLectures.reduce((n, l) => n + (l.methods || []).length, 0)} 个方法卡，${probLectures.reduce((n, l) => n + (l.examples || []).length, 0)} 道例题`);
 
 /* ── HTML 内部链接 ── */
 const htmlFiles = fs.readdirSync(root).filter((f) => f.endsWith(".html"));
@@ -219,12 +229,12 @@ htmlFiles.forEach((file) => {
   for (const m of html.matchAll(/href="proof\.html\?p=([a-z-]+)"/g)) {
     if (!proofIds.has(m[1])) fail(`${file} 链接到不存在的证明：${m[1]}`);
   }
-  for (const m of html.matchAll(/href="lecture\.html\?l=(l\d+)"/g)) {
+  for (const m of html.matchAll(/href="lecture\.html\?l=(p?l\d+)"/g)) {
     if (!lectureIds.has(m[1])) fail(`${file} 链接到不存在的讲次：${m[1]}`);
   }
   if (!html.includes('href="proof.html"')) fail(`${file} 导航缺少「证明」入口`);
   if (!html.includes('href="practice.html#real"')) fail(`${file} 导航缺少「真题」入口`);
-  if (!html.includes('href="lectures.html"')) fail(`${file} 导航缺少「高数18讲」入口`);
+  if (!html.includes('href="lectures.html"')) fail(`${file} 导航缺少「系统精讲」入口`);
 });
 
 /* ── 脚本接入顺序 ── */
@@ -254,6 +264,15 @@ if (reasonAt > chapterAt) fail("reasoning-data.js 必须在 chapter.js 之前");
 const lectureAt = chapterHtml.indexOf("assets/lectures/l01-l03.js");
 if (lectureAt < 0) fail("chapter.html 未接入 18 讲数据");
 if (lectureAt > chapterAt) fail("18 讲数据必须在 chapter.js 之前");
+if (chapterHtml.indexOf("assets/lectures/pl01-pl03.js") < 0) fail("chapter.html 未接入概率 6 讲数据");
+if (chapterHtml.indexOf("assets/lectures/pl04-pl06.js") < 0) fail("chapter.html 未接入概率后 3 讲数据");
+
+/* 概率 8 章都要有对应讲次 */
+["p1", "p2", "p3", "p4", "p5", "p6", "p7", "p8"].forEach((ch) => {
+  if (!probLectures.some((l) => (l.chapters || []).includes(ch))) {
+    fail(`概率章节 ${ch} 没有对应讲次`);
+  }
+});
 
 const lectureHtml = read("lecture.html");
 if (lectureHtml.indexOf("assets/chapters/gaoshu-1.js") < 0) {
@@ -263,7 +282,7 @@ if (lectureHtml.indexOf("assets/chapters/gaoshu-1.js") < 0) {
   const html = read(file);
   const pageAt = html.indexOf("assets/lecture-page.js");
   if (pageAt < 0) fail(`${file} 未接入 lecture-page.js`);
-  ["l01-l03", "l04-l06", "l07-l09", "l10-l12", "l13-l15", "l16-l18"].forEach((name) => {
+  ["l01-l03", "l04-l06", "l07-l09", "l10-l12", "l13-l15", "l16-l18", "pl01-pl03", "pl04-pl06"].forEach((name) => {
     const at = html.indexOf(`assets/lectures/${name}.js`);
     if (at < 0) fail(`${file} 未加载 ${name}.js`);
     if (at > pageAt) fail(`${file} 的 ${name}.js 必须在 lecture-page.js 之前`);

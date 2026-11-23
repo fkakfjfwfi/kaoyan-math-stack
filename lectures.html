@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>高数 18 讲 · 系统精讲 | 研数</title>
-<meta name="description" content="考研数学一高等数学 18 讲系统精讲：知识结构、概念深挖、题型方法卡、精讲例题、二级结论与自测清单，按张宇《基础30讲》高数分册的讲次组织。">
+<title>系统精讲 · 高数 18 讲 + 概率 6 讲 | 研数</title>
+<meta name="description" content="考研数学一系统精讲：高数 18 讲 + 概率 6 讲，含知识结构、概念深挖、题型方法卡、精讲例题、二级结论与自测清单，按张宇《基础30讲》分册讲次组织。">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%231b2430'/%3E%3Ctext x='50' y='71' font-size='60' text-anchor='middle' fill='%23f6f3ec' font-family='Georgia'%3E%E2%88%91%3C/text%3E%3C/svg%3E">
 <link rel="stylesheet" href="assets/style.css">
 <script>try{var t=JSON.parse(localStorage.getItem("yanshu.theme")||"null");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}</script>
@@ -15,7 +15,7 @@
   <a class="logo" href="index.html"><span class="logo-mark">∑</span><span class="logo-text"><b>研数</b><small>数学一 · 301</small></span></a>
   <div class="nav-links">
     <a href="index.html">总览</a>
-    <a href="lectures.html" class="active">高数18讲</a>
+    <a href="lectures.html" class="active">系统精讲</a>
     <a href="gaoshu-1.html">高数·上</a>
     <a href="gaoshu-2.html">高数·下</a>
     <a href="xiandai.html">线性代数</a>
@@ -31,15 +31,17 @@
 </div></nav>
 
 <div class="wrap">
+  <div class="lec-tabs" id="lecTabs"></div>
+
   <header class="hero">
-    <p class="eyebrow">高等数学 · 系统精讲 · 18 讲</p>
-    <h1>把高数从「会套公式」<span class="em">补到能上 120</span></h1>
-    <p class="lede">这一套按《基础30讲》高数分册的 18 讲重组：每讲先给知识结构，再把定义、定理、条件讲透，然后给题型方法卡和 4～6 道精讲例题。例题不只要答案，还要说清「第一眼为什么这样想、哪一步最容易错」。</p>
-    <p class="tagline">18 讲 · 123 个题型方法 · 111 道精讲例题 · 与 305 题库双向链接</p>
+    <p class="eyebrow">高等数学 18 讲 + 概率论与数理统计 6 讲</p>
+    <h1>把高数、概率从「会套公式」<span class="em">补到能上 120</span></h1>
+    <p class="lede">按《基础30讲》分册的讲次重组：每讲先给知识结构，再把定义、定理、条件讲透，然后给题型方法卡和 4～11 道精讲例题。例题不只要答案，还要说清「第一眼为什么这样想、哪一步最容易错」。</p>
+    <p class="tagline">24 讲 · 167 个题型方法 · 158 道精讲例题 · 与 305 题库双向链接</p>
     <div class="hero-actions">
-      <a class="btn" href="lecture.html?l=1">从第 1 讲开始 →</a>
+      <a class="btn" href="lecture.html?l=l1">从高数第 1 讲开始 →</a>
+      <a class="btn ghost" href="lecture.html?l=pl1">从概率第 1 讲开始</a>
       <a class="btn ghost" href="#plan">看学习顺序</a>
-      <a class="btn ghost" href="gaoshu-1.html">回高数模块</a>
     </div>
   </header>
 
@@ -47,7 +49,7 @@
     <div class="co-title">📌 这套讲义怎么用</div>
     <p><b>第一步，先读结构。</b>每讲开头的知识树告诉你这一讲在整章里的位置，先知道「有什么」，再学「为什么」。</p>
     <p><b>第二步，例题遮住步骤自己做。</b>只看懂不算会；能在空白纸上写出「为什么先这样想」才算过关。</p>
-    <p style="margin-bottom:0"><b>第三步，回章末题库练。</b>每讲底部有对应章节和练习入口，做完再回来标记「已掌握」。18 讲不是看一遍就结束，至少要过两轮。</p>
+    <p style="margin-bottom:0"><b>第三步，回章末题库练。</b>每讲底部有对应章节和练习入口，做完再回来标记「已掌握」。每一讲至少过两轮。</p>
   </div>
 
   <h2 class="sec" id="plan">学习顺序 <span class="en">ROADMAP</span></h2>
@@ -70,6 +72,12 @@
       <p>第 13～18 讲。二重/三重/曲线曲面积分、级数判敛与展开，是数一拉开差距的地方。</p>
       <p class="ch-wave">建议配合：g4～g8 章页 + 十年真题</p>
     </div>
+    <div class="card">
+      <span class="ch-num">并行线 · 概率 6 讲</span>
+      <h3>概率论与数理统计</h3>
+      <p>事件与概率、一维/二维分布、数字特征、极限定理、数理统计。概率约 30 分，越早开始越稳。</p>
+      <p class="ch-wave">建议配合：p1～p8 章页 + 概率专项题</p>
+    </div>
   </div>
 
   <div class="lec-progress" id="lecProgress"></div>
@@ -77,13 +85,13 @@
 
   <div class="callout life" style="margin-top:28px">
     <div class="co-title">📚 内容说明</div>
-    <p style="margin-bottom:0">讲次结构参考张宇《考研数学基础30讲·高等数学分册》（2026 版）；正文、例题与方法卡为本站按考纲重写，不照搬原书。遇到与最新大纲冲突的地方，以《全国硕士研究生招生考试数学考试大纲》为准。</p>
+    <p style="margin-bottom:0">讲次结构参考张宇《考研数学基础30讲》高等数学分册与概率论与数理统计分册（2026 版）；正文、例题与方法卡为本站按考纲重写，不照搬原书。遇到与最新大纲冲突的地方，以《全国硕士研究生招生考试数学考试大纲》为准。</p>
   </div>
 </div>
 
 <footer>
   <div class="footer-inner">
-    <p>研数 · 高数 18 讲系统精讲 · 2027 数学一</p>
+    <p>研数 · 系统精讲（高数 18 讲 + 概率 6 讲）· 2027 数学一</p>
     <p class="small">先建结构，再练方法，最后用真题检验。讲义解决「为什么」，题库解决「熟不熟」。</p>
     <div class="pagers"><a href="index.html">总览</a><a href="gaoshu-1.html">高数（上）</a><a href="gaoshu-2.html">高数（下）</a><a href="practice.html#real">十年真题</a><a href="method.html">方法论</a></div>
   </div>
@@ -95,6 +103,8 @@
 <script src="assets/lectures/l10-l12.js"></script>
 <script src="assets/lectures/l13-l15.js"></script>
 <script src="assets/lectures/l16-l18.js"></script>
+<script src="assets/lectures/pl01-pl03.js"></script>
+<script src="assets/lectures/pl04-pl06.js"></script>
 <script src="assets/lecture-page.js"></script>
 </body>
 </html>

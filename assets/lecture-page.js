@@ -1,15 +1,37 @@
-/* 研数 · 高数 18 讲渲染器
-   目录页：lectures.html；详情页：lecture.html?l=l1
+/* 研数 · 系统精讲渲染器
+   目录页：lectures.html?s=gaoshu|prob；详情页：lecture.html?l=l1 / pl1
    数据由 assets/lectures/*.js 提供，统一挂在 window.MATH_LECTURES
+   学科通过讲次的 subject 字段区分，缺省为 gaoshu
 */
 (function () {
   "use strict";
 
   var KEY = "yanshu.lectures";
-  var ALL = (window.MATH_LECTURES || []).slice().sort(function (a, b) { return a.no - b.no; });
   var CHAPTERS = window.MATH_CHAPTERS || {};
+  var SUBJECTS = [
+    { key: "gaoshu", name: "高等数学", short: "高数", label: "高数 18 讲" },
+    { key: "prob", name: "概率论与数理统计", short: "概率", label: "概率 6 讲" }
+  ];
 
-  function $(sel, root) { return (root || document).querySelector(sel); }
+  function subjectOf(l) { return l.subject || "gaoshu"; }
+
+  function subjectMeta(key) {
+    return SUBJECTS.filter(function (s) { return s.key === key; })[0] || SUBJECTS[0];
+  }
+
+  function subjectHref(key) { return "lectures.html?s=" + key; }
+
+  var SUBJECT_INDEX = {};
+  SUBJECTS.forEach(function (s, i) { SUBJECT_INDEX[s.key] = i; });
+
+  var ALL = (window.MATH_LECTURES || []).slice().sort(function (a, b) {
+    return (SUBJECT_INDEX[subjectOf(a)] - SUBJECT_INDEX[subjectOf(b)]) || (a.no - b.no);
+  });
+
+  function itemsOf(key) {
+    return ALL.filter(function (l) { return subjectOf(l) === key; })
+      .sort(function (a, b) { return a.no - b.no; });
+  }
 
   function doneSet() {
     try {
@@ -24,9 +46,9 @@
     try { localStorage.setItem(KEY, JSON.stringify(Array.from(set))); } catch (e) {}
   }
 
-  function partGroups() {
+  function partGroups(items) {
     var groups = [];
-    ALL.forEach(function (l) {
+    items.forEach(function (l) {
       var g = groups[groups.length - 1];
       if (!g || g.part !== l.part) { g = { part: l.part, items: [] }; groups.push(g); }
       g.items.push(l);
@@ -34,27 +56,50 @@
     return groups;
   }
 
-  function pct(done) {
-    return ALL.length ? Math.round(done.size / ALL.length * 100) : 0;
+  function doneCount(items, done) {
+    return items.filter(function (l) { return done.has(l.id); }).length;
+  }
+
+  function pct(items, done) {
+    return items.length ? Math.round(doneCount(items, done) / items.length * 100) : 0;
+  }
+
+  /* ── 学科切换标签 ── */
+  function tabsHtml(active) {
+    return SUBJECTS.map(function (s) {
+      var n = itemsOf(s.key).length;
+      return '<a class="lec-tab' + (s.key === active ? " active" : "") + '" href="' + subjectHref(s.key) + '">' +
+        s.short + '<span>' + n + ' 讲</span></a>';
+    }).join("");
   }
 
   /* ── 目录页 ── */
   function renderIndex() {
     var list = document.getElementById("lectureList");
     if (!list) return;
+    var key = new URLSearchParams(location.search).get("s") || "gaoshu";
+    var meta = subjectMeta(key);
+    var items = itemsOf(meta.key);
+    if (!items.length) { meta = SUBJECTS[0]; items = itemsOf(meta.key); }
     var done = doneSet();
+    var doneN = doneCount(items, done);
+
+    var tabs = document.getElementById("lecTabs");
+    if (tabs) tabs.innerHTML = tabsHtml(meta.key);
 
     var progress = document.getElementById("lecProgress");
     if (progress) {
       progress.innerHTML =
         '<div class="lec-progress-inner">' +
-          '<div><b>' + done.size + '</b> / ' + ALL.length + ' 讲已掌握</div>' +
-          '<div class="lec-bar"><i style="width:' + pct(done) + '%"></i></div>' +
-          '<div class="small">完成一讲就点开详情页右上角的「标记已掌握」。进度只存在本机浏览器。</div>' +
+          '<div><b>' + doneN + '</b> / ' + items.length + ' 讲已掌握</div>' +
+          '<div class="lec-bar"><i style="width:' + pct(items, done) + '%"></i></div>' +
+          '<div class="small">完成一讲就点开详情页的「标记已掌握」。进度只存在本机浏览器。</div>' +
         '</div>';
     }
 
-    list.innerHTML = partGroups().map(function (g) {
+    document.title = meta.label + " · 系统精讲 | 研数";
+
+    list.innerHTML = partGroups(items).map(function (g) {
       return '<h2 class="sec">' + g.part + '</h2>' +
         '<div class="grid cols-2">' + g.items.map(function (l) {
           var ok = done.has(l.id);
@@ -70,8 +115,8 @@
   }
 
   /* ── 详情页 ── */
-  function sideHtml(current, done) {
-    var groups = partGroups().map(function (g) {
+  function sideHtml(current, done, items, meta) {
+    var groups = partGroups(items).map(function (g) {
       return '<div class="lec-side-group"><p class="lec-side-part">' + g.part + '</p>' +
         g.items.map(function (l) {
           var cls = l.id === current.id ? " active" : "";
@@ -81,8 +126,8 @@
           '</a>';
         }).join("") + '</div>';
     }).join("");
-    return '<a class="lec-side-home" href="lectures.html">← 18 讲目录</a>' +
-      '<div class="lec-side-progress">已掌握 ' + done.size + ' / ' + ALL.length + '</div>' +
+    return '<a class="lec-side-home" href="' + subjectHref(meta.key) + '">← ' + meta.label + '目录</a>' +
+      '<div class="lec-side-progress">已掌握 ' + doneCount(items, done) + ' / ' + items.length + '</div>' +
       groups;
   }
 
@@ -168,33 +213,35 @@
     if (/^\d+$/.test(id)) id = "l" + id;
     var l = ALL.filter(function (x) { return x.id === id; })[0];
     if (!l) {
-      app.innerHTML = '<div class="card"><h3>没有找到这一讲</h3><p>链接可能有误，回<a href="lectures.html">18 讲目录</a>重新选择。</p></div>';
+      app.innerHTML = '<div class="card"><h3>没有找到这一讲</h3><p>链接可能有误，回<a href="lectures.html">系统精讲目录</a>重新选择。</p></div>';
       return;
     }
 
+    var meta = subjectMeta(subjectOf(l));
+    var items = itemsOf(meta.key);
     var done = doneSet();
-    var idx = ALL.indexOf(l);
-    var prev = idx > 0 ? ALL[idx - 1] : null;
-    var next = idx < ALL.length - 1 ? ALL[idx + 1] : null;
+    var idx = items.indexOf(l);
+    var prev = idx > 0 ? items[idx - 1] : null;
+    var next = idx < items.length - 1 ? items[idx + 1] : null;
     var isDone = done.has(l.id);
 
-    document.title = "第 " + l.no + " 讲 " + l.title + " | 高数 18 讲 | 研数";
+    document.title = "第 " + l.no + " 讲 " + l.title + " | " + meta.label + " | 研数";
     var desc = document.querySelector('meta[name="description"]');
-    if (desc) desc.setAttribute("content", "高数第 " + l.no + " 讲 " + l.title + "：知识结构、概念精讲、题型方法、精讲例题与自测清单。");
+    if (desc) desc.setAttribute("content", meta.name + "第 " + l.no + " 讲 " + l.title + "：知识结构、概念精讲、题型方法、精讲例题与自测清单。");
 
     var side = document.getElementById("lecSide");
-    if (side) side.innerHTML = sideHtml(l, done);
+    if (side) side.innerHTML = sideHtml(l, done, items, meta);
 
     app.innerHTML =
       '<header class="lec-head">' +
-        '<p class="eyebrow">高等数学 · 第 ' + l.no + ' 讲 · 参考书 p.' + l.bookPage + '</p>' +
+        '<p class="eyebrow">' + meta.name + ' · 第 ' + l.no + ' 讲 · 参考书 p.' + l.bookPage + '</p>' +
         '<h1>' + l.title + '</h1>' +
         '<p class="lede">' + l.intro + '</p>' +
         examHtml(l) +
         '<div class="hero-actions">' +
           '<button class="btn" type="button" id="lecDone">' + (isDone ? "已掌握 ✓（点击取消）" : "标记本讲已掌握") + '</button>' +
           '<a class="btn ghost" href="#examples">直接看例题</a>' +
-          '<a class="btn ghost" href="lectures.html">回 18 讲目录</a>' +
+          '<a class="btn ghost" href="' + subjectHref(meta.key) + '">回 ' + meta.label + '目录</a>' +
         '</div>' +
       '</header>' +
 
@@ -238,7 +285,7 @@
 
       '<div class="chapter-nav">' +
         (prev ? '<a class="chapter-nav-link" href="lecture.html?l=' + prev.id + '"><span>上一讲</span><b>第 ' + prev.no + ' 讲 ' + prev.title + '</b></a>' : "<span></span>") +
-        '<a class="chapter-nav-link center-link" href="lectures.html">回 18 讲目录</a>' +
+        '<a class="chapter-nav-link center-link" href="' + subjectHref(meta.key) + '">回 ' + meta.label + '目录</a>' +
         (next ? '<a class="chapter-nav-link" href="lecture.html?l=' + next.id + '"><span>下一讲</span><b>第 ' + next.no + ' 讲 ' + next.title + '</b></a>' : "<span></span>") +
       '</div>';
 
