@@ -616,6 +616,10 @@
     var reviewCount = document.getElementById("reviewCount");
     var startReviewBtn = document.getElementById("startReview");
     var exitReviewBtn = document.getElementById("exitReview");
+    var realYear = document.getElementById("realYear");
+    var startRealBtn = document.getElementById("startReal");
+    var exitRealBtn = document.getElementById("exitReal");
+    var realMode = false;
 
     function updateBankMsg(text) {
       var msg = document.getElementById("bankMsg");
@@ -623,6 +627,8 @@
     }
 
     function mountCurrent() {
+      realMode = false;
+      if (exitRealBtn) exitRealBtn.hidden = true;
       current = buildPaper(state.paper, state.subject);
       mountQuiz(target, current);
       var meta = PAPERS[state.paper];
@@ -676,6 +682,8 @@
       }
       setPaperVisible(false);
       if (exitReviewBtn) exitReviewBtn.hidden = false;
+      if (exitRealBtn) exitRealBtn.hidden = true;
+      realMode = false;
       mountQuiz(target, due, { allowRetry: true, onChange: refreshReview });
       updateBankMsg("今日复习 · " + due.length + " 题到期");
       var anchor = document.getElementById("bankAnchor");
@@ -684,6 +692,42 @@
 
     function exitReview() {
       if (exitReviewBtn) exitReviewBtn.hidden = true;
+      setPaperVisible(true);
+      mountCurrent();
+    }
+
+    function startReal() {
+      if (!realYear) return;
+      var year = Number(realYear.value);
+      var qs = (window.MATH_BANK || []).filter(function (q) { return q.year === year; })
+        .sort(function (a, b) { return a.no - b.no; });
+      if (!qs.length) {
+        updateBankMsg(year + " 年真题未加载，请刷新页面后重试");
+        return;
+      }
+      if (diagState.active) {
+        diagState.active = false;
+        if (diagResult) { diagResult.hidden = true; diagResult.innerHTML = ""; }
+        if (diagBox) diagBox.classList.remove("is-active");
+      }
+      if (exitReviewBtn) exitReviewBtn.hidden = true;
+      setPaperVisible(false);
+      if (exitRealBtn) exitRealBtn.hidden = false;
+      realMode = true;
+      mountQuiz(target, qs);
+      var bottom = document.createElement("div");
+      bottom.className = "diag-bottom";
+      bottom.innerHTML = '<button class="btn ghost sm" type="button">退出真题，回到组卷</button>';
+      bottom.querySelector("button").addEventListener("click", exitReal);
+      target.appendChild(bottom);
+      updateBankMsg(year + " 年真题精选 · 共 " + qs.length + " 题 · 建议 75 分钟");
+      var anchor = document.getElementById("bankAnchor");
+      if (anchor) anchor.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+
+    function exitReal() {
+      if (exitRealBtn) exitRealBtn.hidden = true;
+      realMode = false;
       setPaperVisible(true);
       mountCurrent();
     }
@@ -722,6 +766,8 @@
       diagState.submitted = false;
       setDiagMode(true);
       if (exitReviewBtn) exitReviewBtn.hidden = true;
+      if (exitRealBtn) exitRealBtn.hidden = true;
+      realMode = false;
       if (diagResult) {
         diagResult.hidden = false;
         diagResult.innerHTML =
@@ -776,7 +822,8 @@
 
       var score = correct * 5;
       var pass = score >= 60;
-      var level = score >= 90 ? "冲高分" : score >= 75 ? "较稳" : score >= 60 ? "基础达标" : "未达 60 分线";
+      var target = score >= 80;
+      var level = score >= 90 ? "冲高分" : score >= 80 ? "达到 120/150 线" : score >= 60 ? "基础达标" : "未达 60 分线";
       var subjectOrder = ["高数", "线代", "概率"];
       var stats = {};
       subjectOrder.forEach(function (s) { stats[s] = { total: 0, correct: 0 }; });
@@ -796,10 +843,10 @@
       var breakdown = subjectOrder.map(function (s) {
         return '<div class="diag-sub"><b>' + SUBJECT_LABEL[s] + '</b><span>' + stats[s].correct + ' / ' + stats[s].total + ' 题</span></div>';
       }).join('');
-      var advice = score >= 75
-        ? "基础线已经很稳。下一步用全真模拟卷限时训练，重点练时间分配和步骤书写。"
+      var advice = target
+        ? "已达到百分制 80（150 分制 120）。下一步用全真模拟卷限时训练，重点练解答题完整度与时间分配。"
         : score >= 60
-          ? "已达到 60 分基础线。接下来用基础卷 + 提高卷把正确率稳定在 70% 以上，再上真题套卷。"
+          ? "已达到 60 分基础线，但 120 分需要更高正确率。先用基础卷 + 提高卷把正确率稳定在 80% 以上，再上十年真题套卷。"
           : "还没到 60 分。先按下面的弱项章节回到模块页，把例题和公式重做一遍，再回来重测。";
       var weakHtml = weakList.length
         ? '<h4>优先补这些章节</h4><ul>' + weakList.map(function (w) {
@@ -861,11 +908,15 @@
     if (startBtn) startBtn.addEventListener("click", startDiagnostic);
     if (startReviewBtn) startReviewBtn.addEventListener("click", startReview);
     if (exitReviewBtn) exitReviewBtn.addEventListener("click", exitReview);
+    if (startRealBtn) startRealBtn.addEventListener("click", startReal);
+    if (exitRealBtn) exitRealBtn.addEventListener("click", exitReal);
+    if (realYear) realYear.addEventListener("change", function () { if (realMode) startReal(); });
     document.addEventListener("qstatschange", refreshReview);
 
     mountCurrent();
     refreshReview();
     if (location.hash === "#diagnostic") startDiagnostic();
+    if (location.hash === "#real") startReal();
   }
 
   /* ── 公式速查 ── */

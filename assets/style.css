@@ -53,6 +53,7 @@
   --code-bg:#222b36;
 }
 *{box-sizing:border-box;margin:0;padding:0}
+[hidden]{display:none!important}
 html{scroll-behavior:smooth;scroll-padding-top:118px}
 body{
   font-family:var(--font-sans);
@@ -337,7 +338,8 @@ table.tbl .num{font-family:var(--font-mono)}
 .review-card p{font-size:12.5px;color:var(--ink-2);margin:0;max-width:72ch}
 .review-card .diag-kicker{font-size:10px}
 .review-card b{color:var(--brand);font-size:15px}
-.review-actions{display:flex;gap:8px;flex-wrap:wrap;flex:none}
+.review-actions{display:flex;gap:8px;flex-wrap:wrap;flex:none;align-items:center}
+.real-select{border:1px solid var(--line);background:var(--card);color:var(--ink-2);border-radius:9px;padding:7px 10px;font-size:12.5px;max-width:130px}
 .review-card.has-due{border-color:var(--brand-2);background:linear-gradient(120deg,var(--brand-soft),var(--card))}
 .review-card.empty-flash{border-color:var(--accent)}
 @media (max-width:700px){

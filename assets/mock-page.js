@@ -50,11 +50,11 @@
         '<p class="eyebrow">全真模拟 · 数学一 · 150 分</p>' +
         '<h1>一次完整的上场演练</h1>' +
         '<p class="lede">严格按 2027 数一结构组卷：10 道单选 50 分、6 道填空 30 分、6 道解答 70 分，180 分钟计时。选择题和填空题自动判分，解答题对答案后按步骤自评。</p>' +
-        '<p class="tagline">150 分 · 180 分钟 · 22 题 · 90 分 = 60% 线</p>' +
+        '<p class="tagline">150 分 · 180 分钟 · 22 题 · 90 分 = 60% 线 · 120 分 = 百分制 80</p>' +
       '</header>' +
       '<div class="grid cols-2">' +
         '<div class="card"><h3>考试规则</h3><ul><li>选择 10 × 5 = 50 分，填空 6 × 5 = 30 分，解答 6 题 = 70 分。</li><li>建议按「选填 55 分钟 + 解答 115 分钟 + 检查 10 分钟」分配。</li><li>解答题先在纸上写完整步骤，再对答案自评，不要只写答案。</li><li>刷新页面会重置本次模拟；建议一次做完。</li></ul></div>' +
-        '<div class="card"><h3>判分方式</h3><ul><li>选择题：点击选项，交卷后自动判分。</li><li>填空题：填写数值，交卷后按数值比较。</li><li>解答题：点击「对答案 / 自评」，按步骤给自己 0 / 部分 / 满分。</li><li>90 / 150 分相当于 100 分制的 60 分。</li></ul></div>' +
+        '<div class="card"><h3>判分方式</h3><ul><li>选择题：点击选项，交卷后自动判分。</li><li>填空题：填写数值，交卷后按数值比较。</li><li>解答题：点击「对答案 / 自评」，按步骤给自己 0 / 部分 / 满分。</li><li>90 / 150 = 60% 线；120 / 150 = 百分制 80 目标线。</li></ul></div>' +
       '</div>' +
       '<div class="callout exam"><div class="co-title">📌 先做诊断，再来模拟</div><p style="margin-bottom:0">如果 20 题诊断还没到 60 分，建议先回章节页补基础，再用这套模拟验收。模拟分数低不代表没救，先看是选填丢分还是解答步骤丢分。</p></div>' +
       '<p class="muted small">说明：选择题来自章内题库，填空与解答为新编题；重点是结构演练与 180 分钟时间分配。</p>' +
@@ -257,6 +257,12 @@
     var total = choiceScore + fillScore + solutionScore;
     var pct = Math.round(total / TOTAL * 100);
     var pass = total >= 90;
+    var target = total >= 120;
+    var verdict = target
+      ? "达到百分制 80 目标线（120 / 150）"
+      : pass
+        ? "达到 60% 线（90 / 150），距 120 还差 " + (120 - total) + " 分"
+        : "未达 60% 线（90 / 150），差 " + (90 - total) + " 分";
 
     var details = choiceDetails.map(function (d, i) {
       return "<li><b>第 " + (i + 1) + " 题</b> " + (d.ok ? "✅" : "❌") +
@@ -270,15 +276,17 @@
     var html =
       '<div class="mock-result ' + (pass ? "pass" : "fail") + '">' +
         '<div class="mock-score"><b>' + total + '</b><span>/150</span><em>' + pct + '%</em></div>' +
-        '<p class="mock-verdict">' + (pass ? "达到 60% 线（90/150）" : "未达 60% 线（90/150）") + (auto ? " · 时间到自动交卷" : "") + '</p>' +
+        '<p class="mock-verdict">' + verdict + (auto ? " · 时间到自动交卷" : "") + '</p>' +
         '<div class="mock-breakdown">' +
           '<div><b>' + choiceScore + '</b><span>选择 / 50</span></div>' +
           '<div><b>' + fillScore + '</b><span>填空 / 30</span></div>' +
           '<div><b>' + solutionScore + '</b><span>解答 / 70</span></div>' +
         '</div>' +
-        '<p class="mock-advice">' + (pass
-          ? "基础分已经拿到。下一步看丢分是在选填还是解答步骤，再回错题和章节页补。"
-          : "先别刷新重做。回章节页把错得最多的两章重看一遍，再做基础卷，最后回来重测。") + '</p>' +
+        '<p class="mock-advice">' + (target
+          ? "已到百分制 80 目标线。下一步保持每周一套，重点把解答题步骤写满，冲 130+。"
+          : pass
+            ? "60% 线已过，但 120 分需要解答题完整度。先补选填漏洞，再把 4 道基础大题写到结论。"
+            : "先别刷新重做。回章节页把错得最多的两章重看一遍，再做基础卷，最后回来重测。") + '</p>' +
         '<details class="mock-details"><summary>查看选择题与填空题答案</summary><ul>' + details + '</ul></details>' +
         '<div class="mock-actions"><button class="btn sm" id="retryMock" type="button">重新开始</button><a class="btn ghost sm" href="practice.html#diagnostic">去做 20 题诊断</a></div>' +
       '</div>';

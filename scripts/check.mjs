@@ -26,6 +26,18 @@ vm.createContext(ctx);
 [
   "assets/bank.js",
   "assets/bank-external.js",
+  "assets/real/2016.js",
+  "assets/real/2017.js",
+  "assets/real/2018.js",
+  "assets/real/2019.js",
+  "assets/real/2020.js",
+  "assets/real/2021.js",
+  "assets/real/2022.js",
+  "assets/real/2023.js",
+  "assets/real/2024.js",
+  "assets/real/2025.js",
+  "assets/real/supplement.js",
+  "assets/bank-real.js",
   "assets/chapters/gaoshu-1.js",
   "assets/chapters/gaoshu-2.js",
   "assets/chapters/xiandai.js",
@@ -52,8 +64,18 @@ bank.forEach((q, i) => {
   if (!Number.isInteger(q.answer) || q.answer < 0 || q.answer > 3) fail(`${where} answer 非法：${q.answer}`);
   if (!q.q || !q.exp) fail(`${where} 题干或解析为空`);
 });
-if (bank.length !== 80) fail(`题库应为 80 题，实际 ${bank.length}`);
+if (bank.length !== 305) fail(`题库应为 305 题，实际 ${bank.length}`);
+const realByYear = {};
+bank.forEach((q) => {
+  if (q.year) realByYear[q.year] = (realByYear[q.year] || 0) + 1;
+});
+Object.keys(realByYear).sort().forEach((y) => {
+  if (realByYear[y] !== 15) fail(`${y} 年真题应为 15 题，实际 ${realByYear[y]}`);
+});
+const supplements = bank.filter((q) => q.origin === "补充").length;
+if (supplements !== 75) fail(`同源补充应为 75 题，实际 ${supplements}`);
 notes.push(`题库 ${bank.length} 题，章节 ${Object.keys(chapters).length} 个`);
+notes.push(`十年真题 ${Object.keys(realByYear).length} 年 × 15 题，补充 ${supplements} 题`);
 
 /* ── 可视化证明 ── */
 const proofIds = new Set();
@@ -112,9 +134,18 @@ htmlFiles.forEach((file) => {
     if (!proofIds.has(m[1])) fail(`${file} 链接到不存在的证明：${m[1]}`);
   }
   if (!html.includes('href="proof.html"')) fail(`${file} 导航缺少「证明」入口`);
+  if (!html.includes('href="practice.html#real"')) fail(`${file} 导航缺少「真题」入口`);
 });
 
 /* ── 脚本接入顺序 ── */
+const practiceHtml = read("practice.html");
+[
+  "assets/real/2016.js", "assets/real/2017.js", "assets/real/2018.js", "assets/real/2019.js",
+  "assets/real/2020.js", "assets/real/2021.js", "assets/real/2022.js", "assets/real/2023.js",
+  "assets/real/2024.js", "assets/real/2025.js", "assets/real/supplement.js", "assets/bank-real.js"
+].forEach((f) => {
+  if (!practiceHtml.includes(f)) fail(`practice.html 未加载 ${f}`);
+});
 ["practice.html", "chapter.html", "gaoshu-1.html", "gaoshu-2.html", "xiandai.html", "gailv.html"].forEach((file) => {
   const html = read(file);
   const dataAt = html.indexOf("assets/solution-data.js");

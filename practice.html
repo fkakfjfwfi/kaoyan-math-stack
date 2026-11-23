@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>练习场 · 80 题跨章组卷与 20 题诊断 | 研数</title>
-<meta name="description" content="考研数学一练习场：20 题零基础诊断、基础卷、提高卷、真题改编卷、全真模拟卷；80 题题库（含 20 题外部题库试跑），14 道高频题带逐步解析与选项级错因诊断，自动错题本、收藏、随机 10 题。">
+<title>练习场 · 305 题十年真题与诊断组卷 | 研数</title>
+<meta name="description" content="考研数学一练习场：305 题题库（2016—2025 十年真题 150 题 + 同源补充 75 题 + 基础提高 80 题），20 题诊断、基础/提高/真题/模拟组卷、14 题交互题解、错题复习。">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%231b2430'/%3E%3Ctext x='50' y='71' font-size='60' text-anchor='middle' fill='%23f6f3ec' font-family='Georgia'%3E%E2%88%91%3C/text%3E%3C/svg%3E">
 <link rel="stylesheet" href="assets/style.css">
 <script>try{var t=JSON.parse(localStorage.getItem("yanshu.theme")||"null");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}</script>
@@ -22,6 +22,7 @@
     <a href="formulas.html">公式速查</a>
     <a href="proof.html">证明</a>
     <a href="practice.html">练习场</a>
+    <a href="practice.html#real">真题</a>
     <a href="method.html">方法论</a>
     <a href="resources.html">资源</a>
   </div>
@@ -30,15 +31,15 @@
 
 <div class="wrap">
   <header class="hero">
-    <p class="eyebrow">PRACTICE · 80 题</p>
+    <p class="eyebrow">PRACTICE · 305 题</p>
     <h1>练习场：<span class="em">按卷刷，不按心情刷</span></h1>
-    <p class="lede">先用 20 题诊断看清自己离 60 分有多远，再用内置四套卷逐层推进。题库与章节页共用，另收录 20 道外部题库试跑题；答错的题自动进错题本。</p>
-    <p class="tagline">80 题题库 · 20 题诊断 · 14 题交互题解 · 全真模拟 · 四套内置 + 收录试跑 · 错题复习</p>
+    <p class="lede">先用 20 题诊断看清基础，再按「十年真题 → 基础/提高 → 全真模拟」推进。题库共 305 题：2016—2025 十年真题精选 150 题、同考点补充 75 题、原有基础提高 80 题；答错的题自动进错题本。</p>
+    <p class="tagline">305 题题库 · 十年真题 150 题 · 20 题诊断 · 14 题交互题解 · 全真模拟 · 错题复习</p>
   </header>
 
   <div class="callout exam">
     <div class="co-title">📌 怎么用最有效</div>
-    <p style="margin-bottom:0">先做 20 题诊断 → 按弱项回模块页补例题 → 做「基础卷」巩固 → 二轮做「提高卷 + 真题改编卷」→ 考前用「全真模拟卷」限时。错题不要只看答案，回到对应章节把概念/公式重写一遍。</p>
+    <p style="margin-bottom:0">先做 20 题诊断 → 用「十年真题」按年份刷近十年 → 按弱项回模块页补例题 → 做「基础卷 / 提高卷」巩固 → 考前用「全真模拟卷」限时。错题不要只看答案，回到对应章节把概念/公式重写一遍。</p>
   </div>
 
   <div class="review-card" id="reviewCard">
@@ -53,10 +54,34 @@
     </div>
   </div>
 
+  <section class="review-card" id="real">
+    <div>
+      <div class="diag-kicker">REAL EXAMS · 2016—2025</div>
+      <h2>十年真题精选</h2>
+      <p>按年份刷近十年真题：每年 15 题，覆盖选择、填空、解答三类题型。2022 年按原卷题号与考点改编；其余年份按当年考点、题型与难度重写，不是原卷。共 150 题真题改编 + 75 题同考点补充，合计 305 题。</p>
+    </div>
+    <div class="review-actions">
+      <select class="real-select" id="realYear" aria-label="选择真题年份">
+        <option value="2025">2025 年</option>
+        <option value="2024">2024 年</option>
+        <option value="2023">2023 年</option>
+        <option value="2022" selected>2022 年</option>
+        <option value="2021">2021 年</option>
+        <option value="2020">2020 年</option>
+        <option value="2019">2019 年</option>
+        <option value="2018">2018 年</option>
+        <option value="2017">2017 年</option>
+        <option value="2016">2016 年</option>
+      </select>
+      <button class="btn sm" id="startReal" type="button">开刷这一年</button>
+      <button class="btn ghost sm" id="exitReal" type="button" hidden>退出真题</button>
+    </div>
+  </section>
+
   <section class="diagnostic" id="diagnostic">
     <div class="diag-kicker">零基础自检 · 20 题 · 满分 100</div>
-    <h2>先测一下：你现在离 60 分有多远？</h2>
-    <p>20 道选择题，按数一分值结构覆盖三科：高数 12 题、线代 4 题、概率 4 题，每题 5 分。建议 40 分钟独立完成、不查资料。它是抽样自检，不是 150 分全真卷；≥60 分说明基础题达到及格线，可以进入真题套卷；低于 60 分会列出弱项章节和补齐入口。</p>
+    <h2>先测一下：你现在离 120 分有多远？</h2>
+    <p>20 道选择题，按数一分值结构覆盖三科：高数 12 题、线代 4 题、概率 4 题，每题 5 分。建议 40 分钟独立完成、不查资料。它是抽样自检，不是 150 分全真卷；≥60 分说明基础题达到及格线，≥80 分对应 150 分制的 120 分目标线。低于 60 分会列出弱项章节和补齐入口。</p>
     <div class="diag-actions">
       <button class="btn" id="startDiagnostic" type="button">开始 20 题诊断 →</button>
       <span class="muted small">不写入错题本，可反复测；若已刷过题库，分数会偏高，建议作为阶段复测</span>
@@ -129,14 +154,26 @@
 
 <footer>
   <div class="footer-inner">
-    <p>研数 · 练习场 · 80 题 + 20 题诊断 + 14 题交互题解</p>
-    <p class="small">错题本按题目 ID 保存，题干改写不会影响历史记录；诊断记录只存在于当前页面，不写入错题本。</p>
-    <div class="pagers"><a href="index.html">总览</a><a href="proof.html">可视化证明</a><a href="method.html">80 分路线</a></div>
+    <p>研数 · 练习场 · 305 题 + 20 题诊断 + 14 题交互题解</p>
+    <p class="small">错题本按题目 ID 保存，题干改写不会影响历史记录；诊断记录只存在于当前页面，不写入错题本。十年真题中，2022 年按公开文本卷题号改编，其余年份按当年考点与题型重写，不冒充原卷。</p>
+    <div class="pagers"><a href="index.html">总览</a><a href="proof.html">可视化证明</a><a href="method.html">120 分路线</a></div>
   </div>
 </footer>
 
 <script src="assets/bank.js"></script>
 <script src="assets/bank-external.js"></script>
+<script src="assets/real/2016.js"></script>
+<script src="assets/real/2017.js"></script>
+<script src="assets/real/2018.js"></script>
+<script src="assets/real/2019.js"></script>
+<script src="assets/real/2020.js"></script>
+<script src="assets/real/2021.js"></script>
+<script src="assets/real/2022.js"></script>
+<script src="assets/real/2023.js"></script>
+<script src="assets/real/2024.js"></script>
+<script src="assets/real/2025.js"></script>
+<script src="assets/real/supplement.js"></script>
+<script src="assets/bank-real.js"></script>
 <script src="assets/solution-data.js"></script>
 <script src="assets/solution-coach.js"></script>
 <script src="assets/app.js"></script>
