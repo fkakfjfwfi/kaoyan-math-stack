@@ -593,6 +593,50 @@ footer .pagers a:hover{border-color:var(--brand);color:var(--brand);text-decorat
   .score-bar{grid-template-columns:86px 1fr 82px;font-size:11.5px}
 }
 
+/* ── 底层逻辑卡 ── */
+.logic-card{background:linear-gradient(135deg,var(--card),var(--bg-soft));border:1px solid var(--line);border-radius:18px;padding:20px 22px;box-shadow:var(--shadow);margin:16px 0}
+.logic-core{font-family:var(--font-serif);font-size:18px;line-height:1.6;color:var(--ink);border-left:4px solid var(--brand);padding-left:12px;margin-bottom:10px}
+.logic-why{font-size:13.5px;color:var(--ink-2);line-height:1.85;margin-bottom:12px}
+.logic-signals{display:grid;gap:8px;margin:12px 0}
+.logic-signal{display:grid;grid-template-columns:auto 18px 1fr;gap:8px;align-items:start;background:var(--card);border:1px solid var(--line);border-radius:11px;padding:9px 12px;font-size:12.5px;line-height:1.65}
+.logic-signal .cue{color:var(--blue);font-weight:700}
+.logic-signal .arrow{color:var(--ink-3);text-align:center}
+.logic-signal .move{color:var(--brand);font-weight:700}
+.logic-signal p{grid-column:1 / -1;margin:2px 0 0;color:var(--ink-3);font-size:11.5px}
+.logic-wrong,.logic-bridge,.logic-drill{border-radius:10px;padding:9px 12px;font-size:12.5px;line-height:1.7;margin-top:8px}
+.logic-wrong{background:var(--red-soft);color:var(--ink-2)}
+.logic-wrong b{color:var(--red)}
+.logic-bridge{background:var(--blue-soft);color:var(--ink-2)}
+.logic-bridge b{color:var(--blue)}
+.logic-drill{background:var(--accent-soft);color:var(--ink-2)}
+.logic-drill b{color:var(--accent)}
+.example-logic{background:var(--accent-soft);border-radius:9px;padding:9px 13px;font-size:13px;line-height:1.7;color:var(--ink-2);margin:8px 0}
+.example-logic b{color:var(--accent)}
+
+/* ── 题解「为什么这样想」与错因修复 ── */
+.sol-why{border:1px solid var(--line);border-radius:12px;background:var(--card-2);padding:12px 14px;margin-bottom:12px}
+.sol-why .wy-title{font-size:12px;font-weight:700;letter-spacing:.08em;color:var(--brand);margin-bottom:7px}
+.sol-why .wy-row{display:grid;grid-template-columns:82px 1fr;gap:8px;font-size:12.5px;line-height:1.7;padding:5px 0;border-top:1px dashed var(--line)}
+.sol-why .wy-row:first-of-type{border-top:none}
+.sol-why .wy-label{color:var(--ink-3);font-weight:700;font-size:11.5px}
+.sol-why .wy-text{color:var(--ink-2)}
+.sol-repair{background:var(--red-soft);border-left:4px solid var(--red);border-radius:0 10px 10px 0;padding:10px 13px;font-size:12.5px;line-height:1.75;color:var(--ink-2);margin-bottom:10px}
+.sol-repair b{color:var(--red)}
+.sol-transfer{background:var(--violet-soft);border-radius:10px;padding:9px 12px;font-size:12.5px;line-height:1.7;color:var(--ink-2);margin-bottom:10px}
+.sol-transfer b{color:var(--violet)}
+.quiz .q-reflect{display:none;margin:0 18px 15px;border:1px dashed var(--line);border-radius:12px;padding:12px 15px;background:var(--accent-soft);font-size:12.5px;line-height:1.75;color:var(--ink-2)}
+.quiz .q-reflect.show{display:block}
+.q-reflect b{color:var(--accent)}
+.q-reflect ol{margin:6px 0 8px 20px}
+.q-reflect li{margin-bottom:3px}
+.q-reflect a{font-weight:700}
+@media (max-width:520px){
+  .logic-card{padding:16px 15px}
+  .logic-core{font-size:16px}
+  .sol-why .wy-row{grid-template-columns:1fr;gap:2px}
+  .quiz .q-reflect{margin:0 12px 13px}
+}
+
 @media (prefers-reduced-motion:reduce){
   html{scroll-behavior:auto}
   *,*::before,*::after{animation-duration:.001ms!important;transition-duration:.001ms!important}

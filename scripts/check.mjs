@@ -43,13 +43,17 @@ vm.createContext(ctx);
   "assets/chapters/xiandai.js",
   "assets/chapters/gailv.js",
   "assets/proof-data.js",
-  "assets/solution-data.js"
+  "assets/reasoning-data.js",
+  "assets/solution-data.js",
+  "assets/solution-why.js"
 ].forEach((f) => load(f, ctx));
 
 const bank = ctx.window.MATH_BANK || [];
 const chapters = ctx.window.MATH_CHAPTERS || {};
 const proofs = ctx.window.MATH_PROOFS || [];
 const solutions = ctx.window.MATH_SOLUTIONS || {};
+const reasoning = ctx.window.MATH_REASONING || {};
+const solutionWhy = ctx.window.MATH_SOLUTION_WHY || {};
 
 /* ── 题库 ── */
 const ids = new Set();
@@ -117,6 +121,36 @@ solIds.forEach((id) => {
 if (solIds.length < 12) fail(`交互题解应不少于 12 题，实际 ${solIds.length}`);
 notes.push(`交互题解 ${solIds.length} 题，其中带图 ${solIds.filter((id) => solutions[id].visual).length} 题`);
 
+/* ── 底层逻辑与「为什么这样想」 ── */
+const chapterIds = Object.keys(chapters);
+chapterIds.forEach((id) => {
+  const r = reasoning[id];
+  if (!r) { fail(`章节 ${id} 缺少底层逻辑卡`); return; }
+  ["core", "why", "wrong", "bridge", "drill"].forEach((k) => {
+    if (!r[k]) fail(`章节 ${id} 的底层逻辑缺字段：${k}`);
+  });
+  if (!Array.isArray(r.signals) || r.signals.length < 2) fail(`章节 ${id} 的信号少于 2 条`);
+  (r.signals || []).forEach((s, i) => {
+    if (!s.cue || !s.move || !s.why) fail(`章节 ${id} 第 ${i + 1} 条信号不完整`);
+  });
+});
+if (Object.keys(reasoning).length !== chapterIds.length) {
+  fail(`底层逻辑卡应为 ${chapterIds.length} 章，实际 ${Object.keys(reasoning).length}`);
+}
+const whyIds = Object.keys(solutionWhy);
+if (whyIds.length !== solIds.length) fail(`题解 why 应为 ${solIds.length} 题，实际 ${whyIds.length}`);
+whyIds.forEach((id) => {
+  if (!solutions[id]) fail(`solution-why 多出题解 ${id}`);
+});
+solIds.forEach((id) => {
+  const w = solutionWhy[id];
+  if (!w) { fail(`题解 ${id} 缺少 why 数据`); return; }
+  ["signal", "principle", "decision", "repair", "transfer"].forEach((k) => {
+    if (!w[k]) fail(`题解 ${id} 的 why 缺字段：${k}`);
+  });
+});
+notes.push(`底层逻辑 ${Object.keys(reasoning).length} 章；题解 why ${whyIds.length} 题`);
+
 /* ── HTML 内部链接 ── */
 const htmlFiles = fs.readdirSync(root).filter((f) => f.endsWith(".html"));
 const pageSet = new Set(htmlFiles);
@@ -149,11 +183,18 @@ const practiceHtml = read("practice.html");
 ["practice.html", "chapter.html", "gaoshu-1.html", "gaoshu-2.html", "xiandai.html", "gailv.html"].forEach((file) => {
   const html = read(file);
   const dataAt = html.indexOf("assets/solution-data.js");
+  const whyAt = html.indexOf("assets/solution-why.js");
   const coachAt = html.indexOf("assets/solution-coach.js");
   const appAt = html.indexOf("assets/app.js");
   if (dataAt < 0 || coachAt < 0) fail(`${file} 未接入交互题解脚本`);
-  if (dataAt > appAt || coachAt > appAt) fail(`${file} 交互题解脚本必须在 app.js 之前`);
+  if (whyAt < 0) fail(`${file} 未接入 solution-why.js`);
+  if (dataAt > appAt || coachAt > appAt || whyAt > appAt) fail(`${file} 交互题解脚本必须在 app.js 之前`);
 });
+const chapterHtml = read("chapter.html");
+const reasonAt = chapterHtml.indexOf("assets/reasoning-data.js");
+const chapterAt = chapterHtml.indexOf("assets/chapter.js");
+if (reasonAt < 0) fail("chapter.html 未接入 reasoning-data.js");
+if (reasonAt > chapterAt) fail("reasoning-data.js 必须在 chapter.js 之前");
 
 /* ── 输出 ── */
 notes.forEach((n) => console.log("· " + n));
