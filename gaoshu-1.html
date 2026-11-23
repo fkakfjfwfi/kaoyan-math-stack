@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>高数（上）· 极限、微分、积分 | 研数</title>
+<meta name="description" content="考研数学一高数上：极限与连续、一元微分、一元积分。含人话类比、公式、例题、极限逼近器与黎曼和实验室、分级练习。">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%231b2430'/%3E%3Ctext x='50' y='71' font-size='60' text-anchor='middle' fill='%23f6f3ec' font-family='Georgia'%3E%E2%88%91%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="assets/style.css">
+<script>try{var t=JSON.parse(localStorage.getItem("yanshu.theme")||"null");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}</script>
+</head>
+<body>
+
+<nav class="topbar"><div class="topbar-inner">
+  <a class="logo" href="index.html"><span class="logo-mark">∑</span><span class="logo-text"><b>研数</b><small>数学一 · 301</small></span></a>
+  <div class="nav-links">
+    <a href="index.html">总览</a>
+    <a href="gaoshu-1.html">高数·上</a>
+    <a href="gaoshu-2.html">高数·下</a>
+    <a href="xiandai.html">线性代数</a>
+    <a href="gailv.html">概率统计</a>
+    <a href="formulas.html">公式速查</a>
+    <a href="practice.html">练习场</a>
+    <a href="method.html">方法论</a>
+    <a href="resources.html">资源</a>
+  </div>
+  <button class="theme-btn" type="button" title="切换明暗主题" aria-label="切换明暗主题">🌙</button>
+</div></nav>
+
+<div class="wrap">
+  <header class="hero">
+    <p class="eyebrow">高数（上）· 模块 1</p>
+    <h1>极限、微分、积分：<span class="em">先把地基打穿</span></h1>
+    <p class="lede">高数上半场只干三件事：学会算极限、学会用导数研究函数、学会用积分累加。后面多元、级数、微分方程，全部建立在这三件事上。</p>
+    <p class="tagline">3 章 · 2 个实验室 · 9 题 · 6 项打卡</p>
+    <div class="hero-actions">
+      <a class="btn" href="#s1">从极限开始 →</a>
+      <a class="btn ghost" href="#quiz">直接做题</a>
+      <a class="btn ghost" href="gaoshu-2.html">下一模块</a>
+    </div>
+  </header>
+
+  <div class="toc">
+    <span class="toc-label">本页目录</span>
+    <a href="#s1">极限与连续</a>
+    <a href="#s2">一元微分</a>
+    <a href="#s3">一元积分</a>
+    <a href="#lab">实验室</a>
+    <a href="#pit">避坑</a>
+    <a href="#quiz">练习</a>
+    <a href="#ck">打卡</a>
+  </div>
+
+  <div class="tbl-wrap">
+    <table class="tbl">
+      <tr><th>章节</th><th>年均分值</th><th>重要度</th><th>主要题型</th></tr>
+      <tr><td>函数、极限与连续</td><td>约 10 分</td><td class="hl">★★★★★</td><td>选填 + 极限计算</td></tr>
+      <tr><td>一元函数微分学</td><td>约 14 分</td><td class="hl">★★★★★</td><td>导数应用 + 中值定理证明</td></tr>
+      <tr><td>一元函数积分学</td><td>约 15 分</td><td class="hl">★★★★★</td><td>定积分计算 + 变限积分</td></tr>
+    </table>
+  </div>
+  <p class="muted small">分值为近五年真题的经验估算，用于排序复习优先级，不必当成精确预测。</p>
+
+  <h2 class="sec" id="s1">1.1 极限与连续 <span class="en">LIMITS</span></h2>
+
+  <div class="callout life">
+    <div class="co-title">🗣 先说人话：极限是「无限靠近」</div>
+    <p>倒车入库时，车可以无限接近库线，但不一定压线。数学里的极限也一样：<b>只关心靠近的过程，不关心终点是否到达</b>。sin x / x 在 x = 0 处没有定义，但 x 越靠近 0，函数值越靠近 1，所以极限是 1。</p>
+  </div>
+
+  <h3 class="sub">必须认全的七种未定式</h3>
+  <div class="tbl-wrap">
+    <table class="tbl">
+      <tr><th>类型</th><th>常见形式</th><th>首选方法</th></tr>
+      <tr><td>0/0</td><td>sin x / x</td><td>等价无穷小、洛必达、泰勒</td></tr>
+      <tr><td>∞/∞</td><td>ln x / x</td><td>洛必达、抓大头</td></tr>
+      <tr><td>0·∞</td><td>x ln x</td><td>改写为 0/(1/x) 或 ∞/(1/x)</td></tr>
+      <tr><td>∞−∞</td><td>1/x − 1/sin x</td><td>通分、有理化、泰勒</td></tr>
+      <tr><td>1^∞</td><td>(1+x)^(1/x)</td><td>取对数或凑 e 的极限</td></tr>
+      <tr><td>0⁰ / ∞⁰</td><td>x^x</td><td>取对数化为 0·∞</td></tr>
+    </table>
+  </div>
+
+  <div class="formula">
+    <span class="fx-label">等价无穷小（x → 0）</span>
+    sin x ~ tan x ~ arcsin x ~ arctan x ~ ln(1+x) ~ eˣ − 1 ~ x<br>
+    1 − cos x ~ x²/2；(1+x)^α − 1 ~ αx；x − sin x ~ x³/6；tan x − x ~ x³/3
+    <span class="small">只允许在乘除因子中替换；加减法里直接替换是最高频的错误。</span>
+  </div>
+
+  <div class="formula">
+    <span class="fx-label">两个重要极限</span>
+    lim(x→0) sin x / x = 1；&nbsp;&nbsp; lim(x→∞) (1 + 1/x)ˣ = e
+    <span class="small">1^∞ 型统一处理：lim u^v = e^(lim v·ln u)，或凑 (1 + 1/t)^t。</span>
+  </div>
+
+  <h3 class="sub">例题：一道题串起三种工具</h3>
+  <div class="card">
+    <p><b>求</b> lim(x→0) (tan x − sin x) / x³。</p>
+    <div class="steps">
+      <div class="step"><b>先化简结构。</b>tan x − sin x = tan x(1 − cos x)，把差变成乘积。</div>
+      <div class="step"><b>再等价替换。</b>tan x ~ x，1 − cos x ~ x²/2，所以分子 ~ x³/2。</div>
+      <div class="step"><b>约分。</b>(x³/2) / x³ = 1/2，极限为 1/2。</div>
+    </div>
+    <p class="muted small" style="margin-bottom:0">如果直接对原式用洛必达，会越求越乱。先看结构，永远比直接求导快。</p>
+  </div>
+
+  <div class="callout warn">
+    <div class="co-title">⚠️ 三个高频坑</div>
+    <ul style="margin-bottom:0">
+      <li>加减法中滥用等价无穷小：sin x − x 不能直接换成 x − x = 0。</li>
+      <li>洛必达前不验证类型：不是 0/0 或 ∞/∞ 就用，结论无效。</li>
+      <li>分段点只算一侧极限：左右极限都存在且相等，才叫极限存在。</li>
+    </ul>
+  </div>
+
+  <h2 class="sec" id="s2">1.2 一元函数微分学 <span class="en">DERIVATIVES</span></h2>
+
+  <div class="callout life">
+    <div class="co-title">🗣 先说人话：导数是「仪表盘上的瞬时速度」</div>
+    <p>平均速度是「一段时间走了多远」，瞬时速度是「此刻仪表盘显示多少」。导数就是把平均变化率的 Δx 压到 0，得到某一瞬间的变化率。可导一定连续，连续不一定可导（比如 |x| 在 0 处）。</p>
+  </div>
+
+  <h3 class="sub">核心考点清单</h3>
+  <div class="grid cols-2">
+    <div class="card">
+      <h3>求导与高阶导数</h3>
+      <p>复合函数链式法则、隐函数求导、参数方程求导、对数求导法、莱布尼茨公式。重点不是背公式，而是<b>识别结构</b>。</p>
+    </div>
+    <div class="card">
+      <h3>中值定理</h3>
+      <p>罗尔、拉格朗日、柯西、泰勒。证明题先看结论，再逆推辅助函数；看到「存在 ξ」先想中值定理，看到「二阶导」先想泰勒。</p>
+    </div>
+    <div class="card">
+      <h3>函数性态</h3>
+      <p>单调区间、极值、凹凸性、拐点、渐近线、曲率。列表讨论最稳：定义域 → 导数 → 驻点/不可导点 → 符号变化。</p>
+    </div>
+    <div class="card">
+      <h3>数一专属</h3>
+      <p>曲率 K = |y″| / (1 + y′²)^(3/2)，曲率半径 R = 1/K。偶有选择或填空，公式记住即可。</p>
+    </div>
+  </div>
+
+  <h3 class="sub">例题：极值 + 渐近线一次做完</h3>
+  <div class="card">
+    <p><b>求</b> y = x e⁻ˣ 的单调区间、极值与渐近线。</p>
+    <div class="steps">
+      <div class="step">y′ = e⁻ˣ − x e⁻ˣ = (1 − x)e⁻ˣ，令 y′ = 0 得 x = 1。</div>
+      <div class="step">x &lt; 1 时 y′ &gt; 0，函数递增；x &gt; 1 时 y′ &lt; 0，函数递减，所以 x = 1 是极大值点，极大值 y(1) = 1/e。</div>
+      <div class="step">x → +∞ 时 y → 0，得水平渐近线 y = 0；x → −∞ 时 y → −∞，没有垂直渐近线。</div>
+    </div>
+  </div>
+
+  <div class="callout exam">
+    <div class="co-title">📌 数一提醒</div>
+    <p>中值定理证明题是解答题常客。看到「f(a) = f(b)」想罗尔；看到「f(b) − f(a)」想拉格朗日；看到两个函数比值想柯西；看到「二阶导」想泰勒展开到二阶。</p>
+  </div>
+
+  <h2 class="sec" id="s3">1.3 一元函数积分学 <span class="en">INTEGRALS</span></h2>
+
+  <div class="callout life">
+    <div class="co-title">🗣 先说人话：积分是「把无数薄片加起来」</div>
+    <p>定积分不是一堆符号，而是把曲线下的面积切成无数薄片再累加。不定积分是「找谁求导能得到它」，所以积分和求导是互逆的。变限积分则是「一边切、一边累加」的函数。</p>
+  </div>
+
+  <h3 class="sub">三条主线</h3>
+  <div class="tbl-wrap">
+    <table class="tbl">
+      <tr><th>主线</th><th>核心动作</th><th>常见题型</th></tr>
+      <tr><td>不定积分</td><td>凑微分 → 换元 → 分部 → 有理函数</td><td>求原函数、递推公式</td></tr>
+      <tr><td>定积分</td><td>性质、对称性、华里士、变限求导</td><td>定积分计算、比较大小</td></tr>
+      <tr><td>应用</td><td>面积、体积、弧长、物理量</td><td>旋转体体积、曲线弧长</td></tr>
+    </table>
+  </div>
+
+  <div class="formula">
+    <span class="fx-label">变限积分求导</span>
+    d/dx ∫φ(x)^ψ(x) f(t) dt = f(ψ(x))ψ′(x) − f(φ(x))φ′(x)
+    <span class="small">上下限都是函数时，两项都要乘内层导数；这是选填高频陷阱。</span>
+  </div>
+
+  <h3 class="sub">例题：分部积分 + 反常端点</h3>
+  <div class="card">
+    <p><b>求</b> ∫₀¹ x ln x dx。</p>
+    <div class="steps">
+      <div class="step">取 u = ln x，dv = x dx，则 du = dx/x，v = x²/2。</div>
+      <div class="step">原式 = [x²/2 · ln x]₀¹ − ∫₀¹ x/2 dx。</div>
+      <div class="step">x → 0⁺ 时 x² ln x → 0，所以第一项为 0；第二项 = 1/4，最终结果为 −1/4。</div>
+    </div>
+    <p class="muted small" style="margin-bottom:0">看到 ln x 与幂函数相乘，优先把 ln x 放进 u；看到 x 与 eˣ 相乘，优先把 eˣ 放进 dv。</p>
+  </div>
+
+  <div class="callout warn">
+    <div class="co-title">⚠️ 积分三大坑</div>
+    <ul style="margin-bottom:0">
+      <li>换元后忘记修改积分上下限，或者忘记把 dx 换成 du。</li>
+      <li>变限积分求导漏乘内层导数，尤其是上限为 x² 的情形。</li>
+      <li>反常积分直接套牛顿—莱布尼茨，没先判断敛散性。</li>
+    </ul>
+  </div>
+
+  <h2 class="sec" id="lab">🔬 实验室：把极限与积分跑起来</h2>
+
+  <div class="lab" data-lab="limit">
+    <div class="lab-title">实验室 1 · 极限逼近器</div>
+    <p class="lab-desc">拖动滑块或点播放，让 x 从右侧一步步靠近 0，观察 sin x / x 是否稳定趋向 1。</p>
+    <div class="lab-stage"><canvas id="labLimit" height="320"></canvas></div>
+    <div class="lab-ctrl">
+      <label>x = <input id="limX" type="range" min="0.01" max="3" step="0.01" value="1.2"><span id="limXVal">1.20</span></label>
+      <button id="limPlay" type="button">播放逼近</button>
+      <button id="limReset" class="ghost" type="button">重置</button>
+    </div>
+    <div class="lab-note" id="limNote"></div>
+    <div class="lab-read" id="limRead"></div>
+  </div>
+
+  <div class="lab" data-lab="riemann" id="lab2">
+    <div class="lab-title">实验室 2 · 黎曼和</div>
+    <p class="lab-desc">曲线 y = x² 在 [0, 2] 上的定积分是 8/3。拖动 n，看矩形如何一点点贴合曲线。</p>
+    <div class="lab-stage"><canvas id="labRiemann" height="320"></canvas></div>
+    <div class="lab-ctrl">
+      <label>n = <input id="rieN" type="range" min="1" max="80" step="1" value="8"><span id="rieNVal">8</span></label>
+      <button id="riePlay" type="button">播放细分</button>
+      <button id="rieReset" class="ghost" type="button">重置</button>
+    </div>
+    <div class="lab-note" id="rieNote"></div>
+    <div class="lab-read" id="rieRead"></div>
+  </div>
+
+  <h2 class="sec" id="pit">⚠️ 本章避坑清单 <span class="en">PITFALLS</span></h2>
+  <div class="callout warn">
+    <div class="co-title">做完题对一遍，能少丢 10 分</div>
+    <ul style="margin-bottom:0">
+      <li>极限先看类型，再选方法；不要一上来就洛必达。</li>
+      <li>等价无穷小只换乘除因子，加减法先通分或泰勒。</li>
+      <li>分段函数在分段点必须分别算左右极限、左右导数。</li>
+      <li>中值定理证明题，辅助函数是从结论逆推出来的，不是硬凑。</li>
+      <li>积分换元三件事：换被积函数、换 dx、换上下限。</li>
+      <li>算完定积分养成检查符号与量纲的习惯。</li>
+    </ul>
+  </div>
+
+  <h2 class="sec" id="quiz">📝 章内练习（9 题 · 基础 → 提高 → 真题改编） <span class="en">PRACTICE</span></h2>
+  <p class="muted">答错自动进错题本，进度保存在本机。可以先做基础题，再回来做提高题。</p>
+  <div data-quiz data-chapters="g1,g2,g3"></div>
+
+  <h2 class="sec" id="ck">✅ 本模块打卡 <span class="progress-pill" data-ck-page>0 / 6 已打卡</span></h2>
+  <div class="checklist">
+    <label class="check-item" data-ck="gs1-1"><input type="checkbox"><span>能说出七种未定式，并给每种配一个例题</span></label>
+    <label class="check-item" data-ck="gs1-2"><input type="checkbox"><span>能默写等价无穷小与两个重要极限，知道替换的使用边界</span></label>
+    <label class="check-item" data-ck="gs1-3"><input type="checkbox"><span>能独立完成一道中值定理证明题，并说清辅助函数的构造思路</span></label>
+    <label class="check-item" data-ck="gs1-4"><input type="checkbox"><span>能列表讨论单调性、极值、凹凸性与渐近线</span></label>
+    <label class="check-item" data-ck="gs1-5"><input type="checkbox"><span>能熟练使用换元、分部、变限求导三类积分技巧</span></label>
+    <label class="check-item" data-ck="gs1-6"><input type="checkbox"><span>完成本页 9 题，错题能说出错因并重做一遍</span></label>
+  </div>
+
+  <p class="center" style="margin-top:28px">
+    <a class="btn" href="gaoshu-2.html">下一模块：高数（下） →</a>
+    <a class="btn ghost" href="practice.html">去练习场组卷</a>
+  </p>
+</div>
+
+<footer>
+  <div class="footer-inner">
+    <p>研数 · 高数（上）· 极限、微分、积分</p>
+    <p class="small">依据 2027 数学一大纲整理；例题与解析为学习用途，题目不冒充真题原题。</p>
+    <div class="pagers"><a href="index.html">总览</a><a href="gaoshu-2.html">高数（下）</a><a href="method.html">备考方法论</a></div>
+  </div>
+</footer>
+
+<script src="assets/bank.js"></script>
+<script src="assets/labs.js"></script>
+<script src="assets/app.js"></script>
+</body>
+</html>

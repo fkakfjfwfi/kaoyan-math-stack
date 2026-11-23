@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>高数（下）· 空间、多元、级数、方程 | 研数</title>
+<meta name="description" content="考研数学一高数下：空间解析几何、多元微分、多元积分、无穷级数、常微分方程。含三大公式、极坐标面积元与幂级数实验室、分级练习。">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%231b2430'/%3E%3Ctext x='50' y='71' font-size='60' text-anchor='middle' fill='%23f6f3ec' font-family='Georgia'%3E%E2%88%91%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="assets/style.css">
+<script>try{var t=JSON.parse(localStorage.getItem("yanshu.theme")||"null");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}</script>
+</head>
+<body>
+
+<nav class="topbar"><div class="topbar-inner">
+  <a class="logo" href="index.html"><span class="logo-mark">∑</span><span class="logo-text"><b>研数</b><small>数学一 · 301</small></span></a>
+  <div class="nav-links">
+    <a href="index.html">总览</a>
+    <a href="gaoshu-1.html">高数·上</a>
+    <a href="gaoshu-2.html">高数·下</a>
+    <a href="xiandai.html">线性代数</a>
+    <a href="gailv.html">概率统计</a>
+    <a href="formulas.html">公式速查</a>
+    <a href="practice.html">练习场</a>
+    <a href="method.html">方法论</a>
+    <a href="resources.html">资源</a>
+  </div>
+  <button class="theme-btn" type="button" title="切换明暗主题" aria-label="切换明暗主题">🌙</button>
+</div></nav>
+
+<div class="wrap">
+  <header class="hero">
+    <p class="eyebrow">高数（下）· 模块 2</p>
+    <h1>空间、多元、级数、方程：<span class="em">数一的大题主战场</span></h1>
+    <p class="lede">数一独有考点大多集中在这一页：空间解析几何、三重积分、曲线曲面积分、傅里叶级数、欧拉方程。内容多，但套路固定，关键是先判断结构、再选公式。</p>
+    <p class="tagline">5 章 · 2 个实验室 · 12 题 · 6 项打卡</p>
+    <div class="hero-actions">
+      <a class="btn" href="#s1">从空间几何开始 →</a>
+      <a class="btn ghost" href="#lab">直接玩实验室</a>
+      <a class="btn ghost" href="xiandai.html">下一模块</a>
+    </div>
+  </header>
+
+  <div class="toc">
+    <span class="toc-label">本页目录</span>
+    <a href="#s1">空间几何</a>
+    <a href="#s2">多元微分</a>
+    <a href="#s3">多元积分</a>
+    <a href="#s4">无穷级数</a>
+    <a href="#s5">微分方程</a>
+    <a href="#lab">实验室</a>
+    <a href="#pit">避坑</a>
+    <a href="#quiz">练习</a>
+    <a href="#ck">打卡</a>
+  </div>
+
+  <div class="tbl-wrap">
+    <table class="tbl">
+      <tr><th>章节</th><th>年均分值</th><th>重要度</th><th>主要题型</th></tr>
+      <tr><td>向量代数与空间解析几何</td><td>约 5 分</td><td>★★★</td><td>选填 · 数一独有</td></tr>
+      <tr><td>多元函数微分学</td><td>约 9 分</td><td>★★★★</td><td>偏导、梯度、条件极值</td></tr>
+      <tr><td>多元函数积分学</td><td>约 16 分</td><td class="hl">★★★★★</td><td>解答题主战场 · 数一独有</td></tr>
+      <tr><td>无穷级数</td><td>约 12 分</td><td>★★★★</td><td>判敛 + 幂级数求和</td></tr>
+      <tr><td>常微分方程</td><td>约 9 分</td><td>★★★★</td><td>一阶/二阶方程 + 欧拉方程</td></tr>
+    </table>
+  </div>
+  <p class="muted small">多元积分与级数是本模块最值得投入的两章；空间几何稳定送分，不要因为分少就放弃。</p>
+
+  <h2 class="sec" id="s1">2.1 向量代数与空间解析几何 <span class="en">GEOMETRY</span></h2>
+  <div class="callout life">
+    <div class="co-title">🗣 先说人话：平面是一张无限大的纸，法向量是垂直插在纸上的箭头</div>
+    <p>只要知道平面过哪个点、法向量朝哪，这张「纸」就唯一确定了。直线则像一个点沿着一个方向无限延伸。空间几何题，本质就是找点和方向。</p>
+  </div>
+  <div class="grid cols-2">
+    <div class="card">
+      <h3>平面与直线</h3>
+      <p>平面点法式：A(x−x₀) + B(y−y₀) + C(z−z₀) = 0；直线对称式：(x−x₀)/l = (y−y₀)/m = (z−z₀)/n。</p>
+    </div>
+    <div class="card">
+      <h3>距离与夹角</h3>
+      <p>点到平面距离 = |Ax₀ + By₀ + Cz₀ + D| / √(A² + B² + C²)。线线角看方向向量，线面角看方向向量与法向量。</p>
+    </div>
+  </div>
+  <div class="formula">
+    <span class="fx-label">必须会写</span>
+    平面点法式：A(x−x₀) + B(y−y₀) + C(z−z₀) = 0<br>
+    点到平面距离：d = |Ax₀ + By₀ + Cz₀ + D| / √(A² + B² + C²)
+    <span class="small">写平面方程前，先确认法向量；写直线前，先确认方向向量与一个已知点。</span>
+  </div>
+  <div class="card">
+    <p><b>例：</b>求过点 (1, 0, 0) 且法向量为 (1, 1, 1) 的平面方程。</p>
+    <p style="margin-bottom:0">代入点法式：1(x − 1) + 1(y − 0) + 1(z − 0) = 0，整理得 <b>x + y + z = 1</b>。</p>
+  </div>
+
+  <h2 class="sec" id="s2">2.2 多元函数微分学 <span class="en">PARTIAL DERIVATIVES</span></h2>
+  <div class="callout life">
+    <div class="co-title">🗣 先说人话：偏导是「固定其他人，只看一个人怎么变」</div>
+    <p>山顶的气温同时受海拔和纬度影响。偏导就是「纬度不动，只往东走一步，温度变多少」。梯度则告诉你：往哪个方向走，温度上升最快。</p>
+  </div>
+  <div class="tbl-wrap">
+    <table class="tbl">
+      <tr><th>考点</th><th>核心动作</th><th>易错点</th></tr>
+      <tr><td>全微分</td><td>dz = f_x dx + f_y dy</td><td>偏导存在推不出可微</td></tr>
+      <tr><td>复合函数</td><td>画变量依赖图，链式相乘再相加</td><td>漏项、漏乘内层导数</td></tr>
+      <tr><td>隐函数</td><td>两边对 x 求导，把 y 看成 y(x)</td><td>忘记 y′ 项</td></tr>
+      <tr><td>方向导数 / 梯度</td><td>∂f/∂l = grad f · e_l</td><td>方向向量未单位化</td></tr>
+      <tr><td>条件极值</td><td>拉格朗日乘数法</td><td>忘记比较边界与约束</td></tr>
+    </table>
+  </div>
+  <div class="formula">
+    <span class="fx-label">梯度与方向导数</span>
+    grad f = (f_x, f_y, f_z)；∂f/∂l = grad f · e_l，其中 e_l 是单位方向向量
+    <span class="small">梯度方向是函数增长最快的方向，梯度的模就是最大方向导数。</span>
+  </div>
+  <div class="card">
+    <p><b>例：</b>设 z = x²y，求 ∂z/∂x 在点 (1, 2) 处的值。</p>
+    <p style="margin-bottom:0">∂z/∂x = 2xy，代入 (1, 2) 得 <b>4</b>。偏导就是把 y 当常数。</p>
+  </div>
+
+  <h2 class="sec" id="s3">2.3 多元函数积分学 <span class="en">MULTIPLE INTEGRALS</span></h2>
+  <div class="callout life">
+    <div class="co-title">🗣 先说人话：二重积分是「把平面切成小格累加」，曲面积分是「把曲面切成小片累加」</div>
+    <p>二重积分算平面区域上的总量，三重积分算立体里的总量，曲线/曲面积分算沿路径或曲面分布的量。三大公式（格林、高斯、斯托克斯）的作用，是把「边界上的积分」换成「内部区域的积分」，或者反过来。</p>
+  </div>
+  <div class="grid cols-2">
+    <div class="card">
+      <h3>二重 / 三重积分</h3>
+      <p>直角坐标定限、极坐标（dσ = r dr dθ）、柱面坐标、球面坐标；对称性优先，能利用奇偶性就别硬算。</p>
+    </div>
+    <div class="card">
+      <h3>曲线 / 曲面积分</h3>
+      <p>第一类看弧长/面积，第二类看方向；格林公式处理平面闭曲线，高斯处理闭曲面，斯托克斯处理空间闭曲线。</p>
+    </div>
+  </div>
+  <div class="formula">
+    <span class="fx-label">三大公式</span>
+    格林：∮_L P dx + Q dy = ∬_D (Q_x − P_y) dxdy<br>
+    高斯：∯_Σ P dydz + Q dzdx + R dxdy = ∭_Ω (P_x + Q_y + R_z) dv<br>
+    斯托克斯：∮_Γ P dx + Q dy + R dz = ∬_Σ (rot F · n) dS
+    <span class="small">用公式前先看：闭不闭合？方向对不对？不闭合时能不能补面/补线？</span>
+  </div>
+  <div class="card">
+    <p><b>例：</b>设 D 为单位圆 x² + y² ≤ 1，求 ∬_D (x² + y²) dσ。</p>
+    <p style="margin-bottom:0">极坐标：∫₀^{2π}∫₀¹ r² · r dr dθ = 2π · 1/4 = <b>π/2</b>。最容易错的地方是漏掉雅可比 r。</p>
+  </div>
+  <div class="callout exam">
+    <div class="co-title">📌 数一提醒</div>
+    <p>多元积分是数一最大分值板块，也是解答题常客。先判断「区域是否封闭、是否适合换面、是否适合极坐标/球坐标」，再动笔。不要一上来就硬算。</p>
+  </div>
+
+  <h2 class="sec" id="s4">2.4 无穷级数 <span class="en">SERIES</span></h2>
+  <div class="callout life">
+    <div class="co-title">🗣 先说人话：级数是「无限个数相加」，收敛是「加得完」</div>
+    <p>1/2 + 1/4 + 1/8 + … 越加越接近 1，叫收敛；1 + 1/2 + 1/3 + … 越加越大，叫发散。幂级数则是「带 x 的级数」，不同的 x 可能收敛也可能发散，收敛范围就是收敛域。</p>
+  </div>
+  <div class="tbl-wrap">
+    <table class="tbl">
+      <tr><th>题型</th><th>方法</th><th>注意</th></tr>
+      <tr><td>正项级数判敛</td><td>比较、比值、根值、积分</td><td>先看通项是否趋于 0</td></tr>
+      <tr><td>交错级数</td><td>莱布尼茨判别法</td><td>单调递减 + 通项趋于 0</td></tr>
+      <tr><td>绝对 / 条件收敛</td><td>先判绝对值级数</td><td>绝对收敛 ⇒ 收敛</td></tr>
+      <tr><td>幂级数收敛域</td><td>先求收敛半径，再单独判端点</td><td>端点最容易漏</td></tr>
+      <tr><td>和函数</td><td>凑标准展开式，逐项求导/积分</td><td>求导后端点敛散性可能变</td></tr>
+      <tr><td>傅里叶级数</td><td>套系数公式，写和函数</td><td>数一独有，注意狄利克雷定理</td></tr>
+    </table>
+  </div>
+  <div class="formula">
+    <span class="fx-label">三个必须记住的展开式</span>
+    1/(1−x) = Σxⁿ（|x| &lt; 1）；eˣ = Σxⁿ/n!；ln(1+x) = Σ(−1)ⁿ⁻¹xⁿ/n（−1 &lt; x ≤ 1）
+    <span class="small">求和函数先「凑」这三个标准式，再逐项求导或积分。</span>
+  </div>
+  <div class="card">
+    <p><b>例：</b>求幂级数 Σ xⁿ/n 的收敛域。</p>
+    <div class="steps">
+      <div class="step">由比值法得收敛半径 R = 1，因此在 (−1, 1) 内绝对收敛。</div>
+      <div class="step">x = 1 时为调和级数 Σ1/n，发散。</div>
+      <div class="step">x = −1 时为交错调和级数，收敛。所以收敛域是 <b>[−1, 1)</b>。</div>
+    </div>
+  </div>
+
+  <h2 class="sec" id="s5">2.5 常微分方程 <span class="en">DIFFERENTIAL EQUATIONS</span></h2>
+  <div class="callout life">
+    <div class="co-title">🗣 先说人话：微分方程是「知道变化率，反求函数」</div>
+    <p>如果知道一辆车的速度随时间怎么变，能不能反推出它任意时刻的位置？这就是微分方程。解不是数，而是函数；通解带常数，特解由初始条件确定。</p>
+  </div>
+  <div class="grid cols-2">
+    <div class="card">
+      <h3>一阶方程</h3>
+      <p>可分离变量、齐次、一阶线性、伯努利、全微分方程。先分类，再套对应解法。</p>
+    </div>
+    <div class="card">
+      <h3>高阶方程</h3>
+      <p>可降阶、二阶常系数齐次/非齐次、欧拉方程。非齐次特解形式看自由项与特征根是否重合。</p>
+    </div>
+  </div>
+  <div class="formula">
+    <span class="fx-label">一阶线性方程通解</span>
+    y′ + P(x)y = Q(x) → y = e^(−∫Pdx) (∫Q·e^(∫Pdx)dx + C)
+    <span class="small">先化成标准形，再找积分因子 e^(∫Pdx)。</span>
+  </div>
+  <div class="card">
+    <p><b>例：</b>求 y′ + y = e⁻ˣ，y(0) = 1 的解。</p>
+    <div class="steps">
+      <div class="step">积分因子 eˣ，两边相乘得 (y eˣ)′ = 1。</div>
+      <div class="step">积分得 y eˣ = x + C。</div>
+      <div class="step">代入 y(0) = 1 得 C = 1，所以 <b>y = (x + 1)e⁻ˣ</b>。</div>
+    </div>
+  </div>
+  <div class="callout warn">
+    <div class="co-title">⚠️ 数一独有：欧拉方程</div>
+    <p>x²y″ + pxy′ + qy = 0，令 x = eᵗ 化为常系数方程。代换后注意链式求导，别把 y′ 直接当成 dy/dt。</p>
+  </div>
+
+  <h2 class="sec" id="lab">🔬 实验室：极坐标与幂级数</h2>
+
+  <div class="lab" data-lab="polar">
+    <div class="lab-title">实验室 3 · 极坐标面积元</div>
+    <p class="lab-desc">拖动 r 与 θ，看极坐标下的小面积元为什么是 r dr dθ，而不是 dr dθ。</p>
+    <div class="lab-stage"><canvas id="labPolar" height="340"></canvas></div>
+    <div class="lab-ctrl">
+      <label>r = <input id="polR" type="range" min="0.2" max="2.2" step="0.05" value="1.2"><span id="polRVal">1.20</span></label>
+      <label>θ = <input id="polT" type="range" min="0" max="5.76" step="0.08" value="0.8"><span id="polTVal">0.25π</span></label>
+    </div>
+    <div class="lab-note" id="polNote"></div>
+    <div class="lab-read" id="polRead"></div>
+  </div>
+
+  <div class="lab" data-lab="series" id="lab2">
+    <div class="lab-title">实验室 4 · 幂级数逼近</div>
+    <p class="lab-desc">增加 eˣ 的泰勒展开项数，看部分和曲线如何一点点贴住 eˣ。</p>
+    <div class="lab-stage"><canvas id="labSeries" height="320"></canvas></div>
+    <div class="lab-ctrl">
+      <label>n = <input id="serN" type="range" min="0" max="12" step="1" value="3"><span id="serNVal">3</span></label>
+      <button id="serPlay" type="button">播放展开</button>
+      <button id="serReset" class="ghost" type="button">重置</button>
+    </div>
+    <div class="lab-note" id="serNote"></div>
+    <div class="lab-read" id="serRead"></div>
+  </div>
+
+  <h2 class="sec" id="pit">⚠️ 本章避坑清单 <span class="en">PITFALLS</span></h2>
+  <div class="callout warn">
+    <div class="co-title">多元积分与级数，错一次记一次</div>
+    <ul style="margin-bottom:0">
+      <li>极坐标漏乘雅可比 r；球坐标漏乘 r² sin φ。</li>
+      <li>第二类曲线/曲面积分方向取反，整题符号全错。</li>
+      <li>高斯公式忘记补面，或补面后忘记减去补面上的积分。</li>
+      <li>幂级数收敛域只写开区间，忘了单独判两个端点。</li>
+      <li>傅里叶系数公式与和函数表达式混淆。</li>
+      <li>微分方程非齐次特解形式，没检查自由项与特征根是否重合。</li>
+    </ul>
+  </div>
+
+  <h2 class="sec" id="quiz">📝 章内练习（12 题 · 基础 → 提高 → 真题改编） <span class="en">PRACTICE</span></h2>
+  <p class="muted">多元积分与级数的题建议先画图/写收敛半径，再选答案。</p>
+  <div data-quiz data-chapters="g4,g5,g6,g7,g8"></div>
+
+  <h2 class="sec" id="ck">✅ 本模块打卡 <span class="progress-pill" data-ck-page>0 / 6 已打卡</span></h2>
+  <div class="checklist">
+    <label class="check-item" data-ck="gs2-1"><input type="checkbox"><span>能默写平面点法式、点到平面距离公式</span></label>
+    <label class="check-item" data-ck="gs2-2"><input type="checkbox"><span>能用链式法则求复合/隐函数偏导，不漏项</span></label>
+    <label class="check-item" data-ck="gs2-3"><input type="checkbox"><span>能独立完成一道二重积分，并说明为什么用极坐标</span></label>
+    <label class="check-item" data-ck="gs2-4"><input type="checkbox"><span>能说清格林、高斯、斯托克斯各自的使用条件与方向</span></label>
+    <label class="check-item" data-ck="gs2-5"><input type="checkbox"><span>能求幂级数收敛域，端点单独讨论</span></label>
+    <label class="check-item" data-ck="gs2-6"><input type="checkbox"><span>能解一阶线性方程与二阶常系数方程，完成本页 12 题</span></label>
+  </div>
+
+  <p class="center" style="margin-top:28px">
+    <a class="btn" href="xiandai.html">下一模块：线性代数 →</a>
+    <a class="btn ghost" href="practice.html">去练习场组卷</a>
+  </p>
+</div>
+
+<footer>
+  <div class="footer-inner">
+    <p>研数 · 高数（下）· 空间、多元、级数、方程</p>
+    <p class="small">依据 2027 数学一大纲整理；三星及以上章节建议优先完成。</p>
+    <div class="pagers"><a href="gaoshu-1.html">高数（上）</a><a href="index.html">总览</a><a href="xiandai.html">线性代数</a></div>
+  </div>
+</footer>
+
+<script src="assets/bank.js"></script>
+<script src="assets/labs.js"></script>
+<script src="assets/app.js"></script>
+</body>
+</html>

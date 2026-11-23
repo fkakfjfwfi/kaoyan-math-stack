@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>线性代数 · 从行列式到二次型 | 研数</title>
+<meta name="description" content="考研数学一线代：行列式、矩阵、向量、方程组、特征值、二次型。含矩阵变换实验室、例题与 10 题分级练习。">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%231b2430'/%3E%3Ctext x='50' y='71' font-size='60' text-anchor='middle' fill='%23f6f3ec' font-family='Georgia'%3E%E2%88%91%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="assets/style.css">
+<script>try{var t=JSON.parse(localStorage.getItem("yanshu.theme")||"null");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}</script>
+</head>
+<body>
+
+<nav class="topbar"><div class="topbar-inner">
+  <a class="logo" href="index.html"><span class="logo-mark">∑</span><span class="logo-text"><b>研数</b><small>数学一 · 301</small></span></a>
+  <div class="nav-links">
+    <a href="index.html">总览</a>
+    <a href="gaoshu-1.html">高数·上</a>
+    <a href="gaoshu-2.html">高数·下</a>
+    <a href="xiandai.html">线性代数</a>
+    <a href="gailv.html">概率统计</a>
+    <a href="formulas.html">公式速查</a>
+    <a href="practice.html">练习场</a>
+    <a href="method.html">方法论</a>
+    <a href="resources.html">资源</a>
+  </div>
+  <button class="theme-btn" type="button" title="切换明暗主题" aria-label="切换明暗主题">🌙</button>
+</div></nav>
+
+<div class="wrap">
+  <header class="hero">
+    <p class="eyebrow">线性代数 · 模块 3</p>
+    <h1>线代六章：<span class="em">秩是总纲，方程组与特征值是落点</span></h1>
+    <p class="lede">线代看起来抽象，其实只研究一件事：线性变换。行列式是面积缩放，矩阵是变换的说明书，秩是有效信息的维数，特征向量是方向不变的向量。</p>
+    <p class="tagline">6 章 · 1 个实验室 · 10 题 · 6 项打卡</p>
+    <div class="hero-actions">
+      <a class="btn" href="#s1">从行列式开始 →</a>
+      <a class="btn ghost" href="#lab">看矩阵怎么变形</a>
+      <a class="btn ghost" href="gailv.html">下一模块</a>
+    </div>
+  </header>
+
+  <div class="toc">
+    <span class="toc-label">本页目录</span>
+    <a href="#s1">行列式</a>
+    <a href="#s2">矩阵</a>
+    <a href="#s3">向量</a>
+    <a href="#s4">方程组</a>
+    <a href="#s5">特征值</a>
+    <a href="#s6">二次型</a>
+    <a href="#lab">实验室</a>
+    <a href="#pit">避坑</a>
+    <a href="#quiz">练习</a>
+    <a href="#ck">打卡</a>
+  </div>
+
+  <div class="tbl-wrap">
+    <table class="tbl">
+      <tr><th>章节</th><th>年均分值</th><th>重要度</th><th>主要题型</th></tr>
+      <tr><td>行列式</td><td>约 4 分</td><td>★★★★</td><td>选填 · 数值/含参计算</td></tr>
+      <tr><td>矩阵</td><td>约 5 分</td><td class="hl">★★★★★</td><td>逆、伴随、秩</td></tr>
+      <tr><td>向量</td><td>约 5 分</td><td class="hl">★★★★★</td><td>相关性、极大无关组</td></tr>
+      <tr><td>线性方程组</td><td>约 6 分</td><td class="hl">★★★★★</td><td>含参讨论、基础解系</td></tr>
+      <tr><td>特征值与特征向量</td><td>约 6 分</td><td class="hl">★★★★★</td><td>解答题高频落点</td></tr>
+      <tr><td>二次型</td><td>约 4 分</td><td>★★★★</td><td>标准形、正定</td></tr>
+    </table>
+  </div>
+  <p class="muted small">线代三十分要拿稳：矩阵、向量、方程组、特征值四章是核心，行列式与二次型是配套工具。</p>
+
+  <h2 class="sec" id="s1">3.1 行列式 <span class="en">DETERMINANT</span></h2>
+  <div class="callout life">
+    <div class="co-title">🗣 先说人话：行列式是「面积 / 体积的缩放倍数」</div>
+    <p>一个 2×2 矩阵把单位正方形变成平行四边形，行列式就是新面积与原来面积的比。行列式为 0，说明平面被压扁成一条线，矩阵不可逆。</p>
+  </div>
+  <div class="grid cols-2">
+    <div class="card">
+      <h3>三条主线</h3>
+      <p>性质化简 → 按行（列）展开 → 特殊结构（范德蒙德、爪型、三对角、加边）。先看结构，不要上来硬展开。</p>
+    </div>
+    <div class="card">
+      <h3>必背性质</h3>
+      <p>|AB| = |A||B|；|kA| = kⁿ|A|；|Aᵀ| = |A|；|A*| = |A|ⁿ⁻¹。注意 n 是阶数。</p>
+    </div>
+  </div>
+  <div class="formula">
+    <span class="fx-label">二阶与三阶</span>
+    |a b; c d| = ad − bc<br>
+    三阶可用对角线法则，但更稳的是按行展开：|A| = Σ aᵢⱼ Aᵢⱼ，Aᵢⱼ 是代数余子式
+    <span class="small">代数余子式自带符号 (−1)^(i+j)，这是高频错点。</span>
+  </div>
+
+  <h2 class="sec" id="s2">3.2 矩阵 <span class="en">MATRIX</span></h2>
+  <div class="callout life">
+    <div class="co-title">🗣 先说人话：矩阵是「线性变换的说明书」</div>
+    <p>把向量喂给矩阵，它会把向量拉伸、旋转、剪切、投影。逆矩阵是「倒带」，秩是「变换后还剩几维有效信息」，伴随矩阵则是求逆时用的工具箱。</p>
+  </div>
+  <div class="tbl-wrap">
+    <table class="tbl">
+      <tr><th>考点</th><th>核心结论</th><th>易错点</th></tr>
+      <tr><td>逆矩阵</td><td>A⁻¹ = A*/|A|，A 可逆 ⇔ |A| ≠ 0</td><td>(AB)⁻¹ = B⁻¹A⁻¹ 顺序写反</td></tr>
+      <tr><td>伴随矩阵</td><td>AA* = A*A = |A|E；|A*| = |A|ⁿ⁻¹</td><td>r(A*) 的三种情形记混</td></tr>
+      <tr><td>秩</td><td>r(AB) ≤ min{r(A), r(B)}；r(A+B) ≤ r(A)+r(B)</td><td>初等变换不改变秩</td></tr>
+      <tr><td>初等变换</td><td>求秩、求逆、解方程组</td><td>换行变号，倍乘改变行列式</td></tr>
+      <tr><td>分块矩阵</td><td>对角块、三角块分别处理</td><td>分块乘法顺序不能乱</td></tr>
+    </table>
+  </div>
+  <div class="formula">
+    <span class="fx-label">伴随矩阵的秩</span>
+    r(A*) = n（r(A) = n）；1（r(A) = n − 1）；0（r(A) &lt; n − 1）
+    <span class="small">选择题常客，三种情形必须条件反射。</span>
+  </div>
+
+  <h2 class="sec" id="s3">3.3 向量 <span class="en">VECTORS</span></h2>
+  <div class="callout life">
+    <div class="co-title">🗣 先说人话：线性相关 = 「有人是别人的组合」</div>
+    <p>一组向量里，如果某个向量能由其他向量拼出来，这组向量就是线性相关的，说明信息有冗余。极大无关组就是「去掉所有冗余后剩下的最小队伍」，队伍人数就是秩。</p>
+  </div>
+  <div class="grid cols-2">
+    <div class="card">
+      <h3>判定套路</h3>
+      <p>把向量按列拼成矩阵 → 做初等行变换 → 数非零行。相关 ⇔ 齐次方程组有非零解 ⇔ 秩小于向量个数。</p>
+    </div>
+    <div class="card">
+      <h3>正交化</h3>
+      <p>施密特正交化：β₂ = α₂ − (α₂,β₁)/(β₁,β₁)·β₁；β₃ 再减去在两个方向上的投影。最后记得单位化。</p>
+    </div>
+  </div>
+  <div class="formula">
+    <span class="fx-label">相关性判定</span>
+    α₁,…,αₛ 线性相关 ⇔ 存在不全为零的 kᵢ，使 Σkᵢαᵢ = 0 ⇔ r(α₁,…,αₛ) &lt; s
+    <span class="small">「不全为零」四个字不能漏；全是零永远成立，没有意义。</span>
+  </div>
+
+  <h2 class="sec" id="s4">3.4 线性方程组 <span class="en">LINEAR SYSTEMS</span></h2>
+  <div class="callout life">
+    <div class="co-title">🗣 先说人话：解方程组就是「找所有满足约束的点」</div>
+    <p>齐次方程组的解构成一个过原点的空间，维数是 n − r(A)；非齐次方程组的解是这个空间平移一个特解。基础解系就是「这个空间的一组基」。</p>
+  </div>
+  <div class="formula">
+    <span class="fx-label">解的判定</span>
+    Ax = 0 有非零解 ⇔ r(A) &lt; n；基础解系含 n − r(A) 个向量<br>
+    Ax = b 有解 ⇔ r(A) = r(A|b)；通解 = 特解 + 齐次通解
+    <span class="small">含参数方程组，先化简再按秩分类讨论，别一上来就克拉默。</span>
+  </div>
+  <div class="card">
+    <p><b>例：</b>求齐次方程组 x₁ + x₂ + x₃ = 0，x₁ − x₂ = 0 的基础解系。</p>
+    <div class="steps">
+      <div class="step">系数矩阵 [[1,1,1],[1,−1,0]]，秩为 2，未知数 3 个，所以基础解系含 1 个向量。</div>
+      <div class="step">由 x₁ = x₂，代入第一式得 2x₁ + x₃ = 0，即 x₃ = −2x₁。</div>
+      <div class="step">取 x₁ = 1，得基础解系 <b>(1, 1, −2)ᵀ</b>，通解为 k(1, 1, −2)ᵀ。</div>
+    </div>
+  </div>
+
+  <h2 class="sec" id="s5">3.5 特征值与特征向量 <span class="en">EIGENVALUES</span></h2>
+  <div class="callout life">
+    <div class="co-title">🗣 先说人话：特征向量是「被矩阵作用后方向不变的向量」</div>
+    <p>大多数向量被矩阵一作用，方向就偏了；但总有那么几个特殊方向，只被拉伸或压缩，方向不变。这些方向就是特征向量，拉伸倍数就是特征值。</p>
+  </div>
+  <div class="grid cols-2">
+    <div class="card">
+      <h3>必背性质</h3>
+      <p>Σλᵢ = tr(A)，Πλᵢ = |A|；Aᵏ、f(A)、A⁻¹、A* 的特征值可由 λ 直接推出。</p>
+    </div>
+    <div class="card">
+      <h3>对角化</h3>
+      <p>A 可相似对角化 ⇔ A 有 n 个线性无关的特征向量。实对称矩阵一定可以正交对角化。</p>
+    </div>
+  </div>
+  <div class="formula">
+    <span class="fx-label">特征方程</span>
+    |λE − A| = 0；对每个 λ，解 (λE − A)x = 0 得特征向量
+    <span class="small">重根时，几何重数（无关特征向量个数）小于代数重数，就不可对角化。</span>
+  </div>
+  <div class="card">
+    <p><b>例：</b>A = [[2,1],[1,2]]，求特征值与特征向量。</p>
+    <div class="steps">
+      <div class="step">|λE − A| = (λ−2)² − 1 = (λ−1)(λ−3)，特征值为 1、3。</div>
+      <div class="step">λ = 1 时解 (E−A)x = 0，得特征向量 (1, −1)ᵀ。</div>
+      <div class="step">λ = 3 时解 (3E−A)x = 0，得特征向量 (1, 1)ᵀ。两个方向正交，正是实对称矩阵的性质。</div>
+    </div>
+  </div>
+
+  <h2 class="sec" id="s6">3.6 二次型 <span class="en">QUADRATIC FORMS</span></h2>
+  <div class="callout life">
+    <div class="co-title">🗣 先说人话：二次型是「带交叉项的曲面」</div>
+    <p>x² + 2xy + 2y² 这种式子，用矩阵写就是 xᵀAx。化标准形就是换一组坐标，把交叉项消掉，看清它到底是椭圆、双曲线还是抛物面。正定就是「除了原点，处处为正」。</p>
+  </div>
+  <div class="formula">
+    <span class="fx-label">正定判别</span>
+    A 正定 ⇔ 顺序主子式全 &gt; 0 ⇔ 特征值全 &gt; 0 ⇔ 正惯性指数 = n
+    <span class="small">前提：A 是实对称矩阵。合同看正负惯性指数，相似看特征值。</span>
+  </div>
+  <div class="card">
+    <p><b>例：</b>判断 f = x² + 2xy + 2y² 是否正定。</p>
+    <p style="margin-bottom:0">二次型矩阵 A = [[1,1],[1,2]]，顺序主子式：1 &gt; 0，1×2 − 1×1 = 1 &gt; 0，所以 A 正定，f 正定。</p>
+  </div>
+
+  <h2 class="sec" id="lab">🔬 实验室：矩阵怎么把网格拉变形</h2>
+  <div class="lab" data-lab="matrix">
+    <div class="lab-title">实验室 5 · 矩阵变换与特征向量</div>
+    <p class="lab-desc">拖动 a、b、c、d 四个元素，观察单位网格如何被拉伸、旋转、剪切。绿色虚线是特征向量方向。</p>
+    <div class="lab-stage"><canvas id="labMatrix" height="360"></canvas></div>
+    <div class="lab-ctrl">
+      <label>a <input id="matA" type="range" min="-2" max="2" step="0.1" value="1"><span id="matAVal">1.0</span></label>
+      <label>b <input id="matB" type="range" min="-2" max="2" step="0.1" value="0.5"><span id="matBVal">0.5</span></label>
+      <label>c <input id="matC" type="range" min="-2" max="2" step="0.1" value="0.5"><span id="matCVal">0.5</span></label>
+      <label>d <input id="matD" type="range" min="-2" max="2" step="0.1" value="1"><span id="matDVal">1.0</span></label>
+    </div>
+    <div class="lab-ctrl">
+      <button class="ghost" data-preset="0,-1,1,0" type="button">旋转 90°</button>
+      <button class="ghost" data-preset="1,1,0,1" type="button">剪切</button>
+      <button class="ghost" data-preset="1,0,0,-1" type="button">对称</button>
+      <button class="ghost" data-preset="1,0,0,0" type="button">投影</button>
+    </div>
+    <div class="lab-note" id="matNote"></div>
+    <div class="lab-read" id="matRead"></div>
+  </div>
+
+  <h2 class="sec" id="pit">⚠️ 本章避坑清单 <span class="en">PITFALLS</span></h2>
+  <div class="callout warn">
+    <div class="co-title">线代丢分，多半是这三个字：秩、方向、重数</div>
+    <ul style="margin-bottom:0">
+      <li>|kA| 忘记 k 的 n 次幂；|A*| 与 |A| 的关系记混。</li>
+      <li>(AB)⁻¹ 顺序写反；(A+B)⁻¹ 直接拆成 A⁻¹ + B⁻¹。</li>
+      <li>含参方程组不分类讨论，或漏掉系数为 0 的情形。</li>
+      <li>基础解系向量个数算成 r(A)，应为 n − r(A)。</li>
+      <li>特征向量忘记非零；重根时不做无关特征向量个数的判断。</li>
+      <li>二次型正交变换时，特征向量顺序与特征值不匹配。</li>
+    </ul>
+  </div>
+
+  <h2 class="sec" id="quiz">📝 章内练习（10 题 · 基础 → 提高） <span class="en">PRACTICE</span></h2>
+  <div data-quiz data-chapters="x1,x2,x3,x4,x5,x6"></div>
+
+  <h2 class="sec" id="ck">✅ 本模块打卡 <span class="progress-pill" data-ck-page>0 / 6 已打卡</span></h2>
+  <div class="checklist">
+    <label class="check-item" data-ck="xd-1"><input type="checkbox"><span>能熟练计算 2、3 阶行列式，知道 |kA| 与 |A*| 的公式</span></label>
+    <label class="check-item" data-ck="xd-2"><input type="checkbox"><span>能求逆矩阵、伴随矩阵，并说出 r(A*) 的三种情形</span></label>
+    <label class="check-item" data-ck="xd-3"><input type="checkbox"><span>能判断向量组相关性，求极大无关组与秩</span></label>
+    <label class="check-item" data-ck="xd-4"><input type="checkbox"><span>能解含参方程组，写全基础解系与通解</span></label>
+    <label class="check-item" data-ck="xd-5"><input type="checkbox"><span>能求特征值/特征向量，判断是否可相似对角化</span></label>
+    <label class="check-item" data-ck="xd-6"><input type="checkbox"><span>能用正交变换化二次型为标准形，判断正定性</span></label>
+  </div>
+
+  <p class="center" style="margin-top:28px">
+    <a class="btn" href="gailv.html">下一模块：概率统计 →</a>
+    <a class="btn ghost" href="practice.html">去练习场组卷</a>
+  </p>
+</div>
+
+<footer>
+  <div class="footer-inner">
+    <p>研数 · 线性代数 · 六章一条线</p>
+    <p class="small">线代复习顺序建议：行列式 → 矩阵 → 向量 → 方程组 → 特征值 → 二次型，不要跳章。</p>
+    <div class="pagers"><a href="gaoshu-2.html">高数（下）</a><a href="index.html">总览</a><a href="gailv.html">概率统计</a></div>
+  </div>
+</footer>
+
+<script src="assets/bank.js"></script>
+<script src="assets/labs.js"></script>
+<script src="assets/app.js"></script>
+</body>
+</html>

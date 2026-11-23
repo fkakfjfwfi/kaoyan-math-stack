@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>公式速查 · 45 条核心公式 | 研数</title>
+<meta name="description" content="考研数学一公式速查：高数、线代、概率共 45 条核心公式，支持分类筛选、搜索与一键复制。">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%231b2430'/%3E%3Ctext x='50' y='71' font-size='60' text-anchor='middle' fill='%23f6f3ec' font-family='Georgia'%3E%E2%88%91%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="assets/style.css">
+<script>try{var t=JSON.parse(localStorage.getItem("yanshu.theme")||"null");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}</script>
+</head>
+<body>
+
+<nav class="topbar"><div class="topbar-inner">
+  <a class="logo" href="index.html"><span class="logo-mark">∑</span><span class="logo-text"><b>研数</b><small>数学一 · 301</small></span></a>
+  <div class="nav-links">
+    <a href="index.html">总览</a>
+    <a href="gaoshu-1.html">高数·上</a>
+    <a href="gaoshu-2.html">高数·下</a>
+    <a href="xiandai.html">线性代数</a>
+    <a href="gailv.html">概率统计</a>
+    <a href="formulas.html">公式速查</a>
+    <a href="practice.html">练习场</a>
+    <a href="method.html">方法论</a>
+    <a href="resources.html">资源</a>
+  </div>
+  <button class="theme-btn" type="button" title="切换明暗主题" aria-label="切换明暗主题">🌙</button>
+</div></nav>
+
+<div class="wrap">
+  <header class="hero">
+    <p class="eyebrow">FORMULA SHEET · 45 条</p>
+    <h1>公式速查：<span class="em">考前每天默写 10 分钟</span></h1>
+    <p class="lede">高数、线代、概率三科核心公式。支持按科目筛选、关键词搜索、一键复制。建议不要收藏了就完事，每天挑 10 条默写，遮住右边、在纸上写出来。</p>
+    <p class="tagline">45 条 · 3 科 · 可搜索 · 可复制</p>
+    <div class="hero-actions">
+      <a class="btn" href="#sheet">开始查公式 →</a>
+      <a class="btn ghost" href="method.html">看怎么背公式</a>
+    </div>
+  </header>
+
+  <h2 class="sec" id="sheet">按科目筛选 <span class="en">FILTER</span></h2>
+  <div style="display:flex;gap:12px;flex-wrap:wrap;align-items:center;margin-bottom:10px">
+    <div class="tabs" id="formulaTabs">
+      <button class="tab is-active" data-cat="全部" type="button">全部 <span>45</span></button>
+      <button class="tab" data-cat="高数" type="button">高等数学 <span>20</span></button>
+      <button class="tab" data-cat="线代" type="button">线性代数 <span>12</span></button>
+      <button class="tab" data-cat="概率" type="button">概率统计 <span>13</span></button>
+    </div>
+    <label class="search">
+      <span aria-hidden="true">⌕</span>
+      <input id="formulaSearch" type="search" placeholder="搜索公式名称，如「格林」「方差」" autocomplete="off" aria-label="搜索公式">
+    </label>
+  </div>
+
+  <div class="formula-list" id="formulaList"></div>
+  <div class="quiz-empty" id="formulaEmpty" hidden>没有匹配的公式，换个关键词或切换科目试试。</div>
+
+  <div class="callout exam" style="margin-top:22px">
+    <div class="co-title">📌 默写方法</div>
+    <p style="margin-bottom:0">每天选 10 条：先看名称，在纸上写出公式；写完对照，错的用红笔圈出；第二天先默写昨天错的。连续 7 天，比一次性抄 10 页有效得多。</p>
+  </div>
+
+  <p class="center" style="margin-top:26px">
+    <a class="btn ghost" href="gaoshu-1.html">回高数（上）</a>
+    <a class="btn ghost" href="practice.html">去练习场</a>
+  </p>
+</div>
+
+<footer>
+  <div class="footer-inner">
+    <p>研数 · 公式速查 · 45 条</p>
+    <p class="small">公式按数一大纲整理；符号约定与教材一致，使用时注意适用条件与端点。</p>
+    <div class="pagers"><a href="index.html">总览</a><a href="method.html">备考方法论</a><a href="resources.html">资源导航</a></div>
+  </div>
+</footer>
+
+<script src="assets/formulas.js"></script>
+<script src="assets/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>练习场 · 42 题跨章组卷 | 研数</title>
+<meta name="description" content="考研数学一练习场：基础卷、提高卷、真题改编卷、全真模拟卷；42 题题库，自动错题本、收藏、随机 10 题，进度保存在本机。">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%231b2430'/%3E%3Ctext x='50' y='71' font-size='60' text-anchor='middle' fill='%23f6f3ec' font-family='Georgia'%3E%E2%88%91%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="assets/style.css">
+<script>try{var t=JSON.parse(localStorage.getItem("yanshu.theme")||"null");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}</script>
+</head>
+<body>
+
+<nav class="topbar"><div class="topbar-inner">
+  <a class="logo" href="index.html"><span class="logo-mark">∑</span><span class="logo-text"><b>研数</b><small>数学一 · 301</small></span></a>
+  <div class="nav-links">
+    <a href="index.html">总览</a>
+    <a href="gaoshu-1.html">高数·上</a>
+    <a href="gaoshu-2.html">高数·下</a>
+    <a href="xiandai.html">线性代数</a>
+    <a href="gailv.html">概率统计</a>
+    <a href="formulas.html">公式速查</a>
+    <a href="practice.html">练习场</a>
+    <a href="method.html">方法论</a>
+    <a href="resources.html">资源</a>
+  </div>
+  <button class="theme-btn" type="button" title="切换明暗主题" aria-label="切换明暗主题">🌙</button>
+</div></nav>
+
+<div class="wrap">
+  <header class="hero">
+    <p class="eyebrow">PRACTICE · 42 题</p>
+    <h1>练习场：<span class="em">按卷刷，不按心情刷</span></h1>
+    <p class="lede">四套卷覆盖基础、提高、真题改编与全真模拟。题库与章节页共用，答错的题自动进错题本；收藏、只看错题、随机 10 题都在 HUD 里。</p>
+    <p class="tagline">42 题题库 · 四套组卷 · 错题本 · 收藏 · 随机 10 题</p>
+  </header>
+
+  <div class="callout exam">
+    <div class="co-title">📌 怎么用最有效</div>
+    <p style="margin-bottom:0">学完一章 → 做该章章末题 → 来练习场做「基础卷」巩固 → 二轮做「提高卷 + 真题改编卷」→ 考前用「全真模拟卷」限时。错题不要只看答案，回到对应章节把概念/公式重写一遍。</p>
+  </div>
+
+  <h2 class="sec">选择试卷 <span class="en">PAPERS</span></h2>
+  <div class="paper-grid" id="paperGrid">
+    <button class="paper-card on" data-paper="basic" type="button">
+      <span class="pc-title">基础卷</span>
+      <span class="pc-desc">三科基础题混合，检验概念是否真的听懂。</span>
+      <span class="pc-meta">12 题 · 建议 25 分钟</span>
+    </button>
+    <button class="paper-card" data-paper="mid" type="button">
+      <span class="pc-title">提高卷</span>
+      <span class="pc-desc">辨析与综合计算，二轮复习用。</span>
+      <span class="pc-meta">12 题 · 建议 30 分钟</span>
+    </button>
+    <button class="paper-card" data-paper="real" type="button">
+      <span class="pc-title">真题改编卷</span>
+      <span class="pc-desc">按真题题型改编，覆盖高频考点与常见陷阱。</span>
+      <span class="pc-meta">10 题 · 建议 35 分钟</span>
+    </button>
+    <button class="paper-card" data-paper="mock" type="button">
+      <span class="pc-title">全真模拟卷</span>
+      <span class="pc-desc">三科混合随机抽题，模拟考场节奏。</span>
+      <span class="pc-meta">16 题 · 建议 45 分钟</span>
+    </button>
+  </div>
+
+  <div class="filter-bar" id="subjectFilter">
+    <span class="fb-label">科目：</span>
+    <button class="on" data-subject="全部" type="button">全部</button>
+    <button data-subject="高数" type="button">高等数学</button>
+    <button data-subject="线代" type="button">线性代数</button>
+    <button data-subject="概率" type="button">概率统计</button>
+  </div>
+
+  <h2 class="sec" id="bankAnchor">题目 <span class="en" id="bankMsg"></span></h2>
+  <div id="practiceQuiz"></div>
+
+  <div class="callout" style="margin-top:26px">
+    <b>说明：</b>答题记录、错题本、收藏与章节页共用同一份 localStorage；换页面不丢，清除浏览器数据会重置。页面不依赖外部 CDN，本地直接双击 HTML 也能做题。<br>
+    <span class="muted small">题目为经典题型与真题改编，不冒充原题；解析以考场最快解法为准，不展开教材式推导。</span>
+  </div>
+
+  <p class="center" style="margin-top:26px">
+    <a class="btn ghost" href="method.html">去看备考方法论 →</a>
+    <a class="btn ghost" href="formulas.html">去公式速查</a>
+  </p>
+</div>
+
+<footer>
+  <div class="footer-inner">
+    <p>研数 · 练习场 · 42 题</p>
+    <p class="small">错题本按题目 ID 保存，题干改写不会影响历史记录；换浏览器或清缓存会重置。</p>
+    <div class="pagers"><a href="index.html">总览</a><a href="gaoshu-1.html">高数（上）</a><a href="method.html">备考方法论</a></div>
+  </div>
+</footer>
+
+<script src="assets/bank.js"></script>
+<script src="assets/app.js"></script>
+</body>
+</html>
