@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>研数 · 考研数学一学习站（2027）</title>
-<meta name="description" content="2027 考研数学一学习站：22 章课程、6 个交互实验室、80 题练习、20 题诊断、全真模拟、公式速查与错题复习。">
+<meta name="description" content="2027 考研数学一学习站：22 章课程、6 个交互实验室、10 个可视化证明、80 题练习、14 题交互题解、20 题诊断、全真模拟、公式速查与 80 分路线。">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%231b2430'/%3E%3Ctext x='50' y='71' font-size='60' text-anchor='middle' fill='%23f6f3ec' font-family='Georgia'%3E%E2%88%91%3C/text%3E%3C/svg%3E">
 <link rel="stylesheet" href="assets/style.css">
 <script>try{var t=JSON.parse(localStorage.getItem("yanshu.theme")||"null");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}</script>
@@ -20,6 +20,7 @@
     <a href="xiandai.html">线性代数</a>
     <a href="gailv.html">概率统计</a>
     <a href="formulas.html">公式速查</a>
+    <a href="proof.html">证明</a>
     <a href="practice.html">练习场</a>
     <a href="method.html">方法论</a>
     <a href="resources.html">资源</a>
@@ -32,11 +33,11 @@
     <p class="eyebrow">2027 考研 · 数学一 · 科目代码 301</p>
     <h1>把数学一，<span class="em">画出来再算出来</span></h1>
     <p class="lede">这是为 2027 数一考生准备的学习站。每个概念先说人话，再用可拖拽的实验室把「极限怎么逼近、积分怎么累加、矩阵怎么变形、样本均值怎么变正态」演出来，最后落到课程式结构：考点、例题、避坑、练习、打卡。</p>
-    <p class="tagline">4 大模块 · 22 章 · 6 个交互实验室 · 80 题 · 20 题诊断 · 45 条公式 · 30 项打卡</p>
+    <p class="tagline">4 大模块 · 22 章 · 6 个实验室 · 10 个可视化证明 · 80 题 · 14 题交互题解 · 80 分路线</p>
     <div class="hero-actions">
       <a class="btn" href="gaoshu-1.html">从高数（上）开始 →</a>
-      <a class="btn ghost" href="practice.html">去练习场</a>
-      <a class="btn ghost" href="method.html">先看方法论</a>
+      <a class="btn ghost" href="proof.html">看可视化证明</a>
+      <a class="btn ghost" href="method.html#eighty">看 80 分路线</a>
     </div>
   </header>
 
@@ -62,6 +63,7 @@
     <div class="stat"><b>150</b><span>满分 · 180 分钟</span></div>
     <div class="stat"><b>22</b><span>章 · 对齐数一大纲</span></div>
     <div class="stat"><b>6</b><span>个交互实验室</span></div>
+    <div class="stat"><b>10</b><span>个可视化证明</span></div>
     <div class="stat"><b>80</b><span>题 · 练习场题库</span></div>
     <div class="stat"><b>45</b><span>条公式速查</span></div>
     <div class="stat"><b id="cdDays">--</b><span>天 · 距数学考试</span></div>
@@ -79,6 +81,16 @@
     <p style="margin-bottom:0"><a class="btn sm" href="mock.html">进入全真模拟 →</a></p>
   </div>
 
+  <div class="callout exam">
+    <div class="co-title">🎯 目标 80 分：证明能看见，错因能定位</div>
+    <p>新加两条引擎：<b>可视化证明播放器</b>把零点定理、中值定理、泰勒、积分中值、格林、正交对角化拆成可拖拽的分步画面；<b>交互题解</b>在 14 道高频题上给出逐步解析，并按你选的选项指出错在哪一步。80 分路线把目标拆成四关，每关都有可验收的数字。</p>
+    <p style="margin-bottom:0">
+      <a class="btn sm" href="proof.html">进可视化证明 →</a>
+      <a class="btn ghost sm" href="method.html#eighty">看 80 分路线</a>
+      <a class="btn ghost sm" href="practice.html">去练习场</a>
+    </p>
+  </div>
+
   <h2 class="sec">为什么这么学 <span class="en">WHY THIS WAY</span></h2>
   <div class="grid cols-2">
     <div class="card">
@@ -91,11 +103,11 @@
     </div>
     <div class="card">
       <h3>🔬 然后自己动手算</h3>
-      <p>看懂 ≠ 会算。每个实验室下面都配了「该看什么」的提示；每题都有解析，错题自动进错题本，支持收藏、只看错题、随机 10 题。</p>
+      <p>看懂 ≠ 会算。每个实验室下面都配了「该看什么」的提示；14 道高频题带<b>逐步解析 + 选项级错因诊断</b>，选错会直接告诉你错在条件、计算还是概念，错题自动进错题本。</p>
     </div>
     <div class="card">
       <h3>🧭 最后落到采分点</h3>
-      <p>方法论独立成页：150 分怎么分布、三轮怎么切、六类计算题模板、错题本三栏法、考场 180 分钟怎么分配。练习场按基础 / 提高 / 真题改编 / 全真模拟组卷。</p>
+      <p>方法论独立成页：150 分怎么分布、60/80 分路线、六类计算题模板、错题本三栏法、考场 180 分钟怎么分配。10 个可视化证明覆盖大纲要求的高频证明，每一步都写清「为什么成立」。</p>
     </div>
   </div>
 
@@ -133,10 +145,17 @@
     </a>
     <a class="card clickable" href="practice.html">
       <span class="ch-num">跨章 · 练习场</span>
-      <h3>四套卷 + 错题本</h3>
-      <p>80 题题库自动汇总：60 道内置题 + 20 道外部题库试跑题；基础卷、提高卷、真题改编卷、全真模拟卷。答错自动进错题本，支持收藏与随机 10 题。</p>
-      <div class="chips"><span class="chip new">跨章组卷</span><span class="chip">错题本</span><span class="chip">收藏</span><span class="chip">随机抽题</span></div>
+      <h3>五套卷 + 错题本</h3>
+      <p>80 题题库自动汇总：60 道内置题 + 20 道外部题库试跑题；基础卷、提高卷、真题改编卷、全真模拟卷。14 道高频题带逐步解析与错因诊断，答错自动进错题本。</p>
+      <div class="chips"><span class="chip new">交互题解</span><span class="chip">错题本</span><span class="chip">收藏</span><span class="chip">随机抽题</span></div>
       <div class="ch-wave">建议每学完一章来一次「基础卷」自测</div>
+    </a>
+    <a class="card clickable" href="proof.html">
+      <span class="ch-num">工具 · 可视化证明</span>
+      <h3>10 个高频证明的分步图解</h3>
+      <p>零点/介值、罗尔、拉格朗日、柯西、泰勒、积分中值、变上限积分、格林公式、施密特正交化、实对称对角化；可拖拽图形 + 每步「为什么成立」+ 考场写法。</p>
+      <div class="chips"><span class="chip new">分步播放</span><span class="chip">可拖拽</span><span class="chip">考场模板</span><span class="chip hot">证明题必备</span></div>
+      <div class="ch-wave">先看见机制，再默写逻辑链</div>
     </a>
     <a class="card clickable" href="formulas.html">
       <span class="ch-num">工具 · 公式速查</span>
@@ -150,6 +169,12 @@
   <div class="callout exam">
     <div class="co-title">📌 数一独有考点，别按数二/数三的范围复习</div>
     <p style="margin-bottom:0">向量代数与空间解析几何、三重积分、曲线积分与曲面积分、格林/高斯/斯托克斯公式、傅里叶级数、欧拉方程、假设检验、方向导数与梯度、散度与旋度。</p>
+  </div>
+
+  <div class="callout">
+    <div class="co-title">🧱 基础先修：80 分真正依赖的 10 个动作</div>
+    <p>80 分不靠压轴题，靠「等价无穷小、换元三件事、二重积分定限、秩与基础解系、特征值验算、数字特征公式」这些手上功夫。方法论页把它们列成一张清单，每项都配了去哪个章节学、用什么动作验收。</p>
+    <p style="margin-bottom:0"><a class="btn sm" href="method.html#eighty">看 10 个基础动作与验收标准 →</a></p>
   </div>
 
   <h2 class="sec">🎬 交互实验室（6 个） <span class="en">INTERACTIVE LABS</span></h2>
@@ -170,9 +195,10 @@
   <div class="steps">
     <div class="step"><b>第 0 步 · 先认清战场。</b>数一 150 分：高数约 90 分、线代约 30 分、概率约 30 分；10 道单选 + 6 道填空共 80 分，6 道解答 70 分。选填决定下限，解答决定上限。</div>
     <div class="step"><b>第 1 步 · 按模块过章。</b>每章先看人话类比 → 读考点与公式 → 做一道例题 → 玩实验室 → 做章末题 → 勾打卡。不要一上来刷套卷。</div>
-    <div class="step"><b>第 2 步 · 去练习场组卷。</b>基础卷 → 提高卷 → 真题改编卷 → 全真模拟卷。答错的题自动进错题本，用「只看错题」重做，用「随机 10 题」防背题。</div>
+    <div class="step"><b>第 2 步 · 去练习场组卷。</b>基础卷 → 提高卷 → 真题改编卷 → 全真模拟卷。答错的题自动进错题本；带「逐步解析」的题会按你选的选项指出错因，用「只看错题」重做，用「随机 10 题」防背题。</div>
     <div class="step"><b>第 3 步 · 配合教材与网课。</b>高数跟武忠祥或张宇，线代跟李永乐，概率跟余丙森或王式安。本站当作「看不懂时的可视化字典」，不是替代教材。</div>
-    <div class="step"><b>第 4 步 · 方法先行。</b>先读一遍<a href="method.html">备考方法论</a>：三轮怎么切、六类计算题模板、错题本三栏怎么写。方法错了，投入全废。</div>
+    <div class="step"><b>第 4 步 · 方法先行。</b>先读一遍<a href="method.html">备考方法论</a>：60/80 分路线、三轮怎么切、六类计算题模板、错题本三栏怎么写。方法错了，投入全废。</div>
+    <div class="step"><b>第 5 步 · 证明单独过。</b>去<a href="proof.html">可视化证明</a>把 10 个高频证明逐步看一遍，每看完一个就合上页面默写「条件 → 辅助函数 → 定理 → 结论」。</div>
   </div>
 
   <h2 class="sec">📌 使用说明 <span class="en">HOW TO USE</span></h2>

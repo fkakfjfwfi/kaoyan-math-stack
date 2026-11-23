@@ -58,6 +58,19 @@
 
     var pitfalls = (c.pitfalls || []).map(function (p) { return "<li>" + p + "</li>"; }).join("");
 
+    // 本章对应的可视化证明（proof-data.js 提供）
+    var proofs = (window.MATH_PROOFS || []).filter(function (p) { return p.chapter === c.id; });
+    var proofHtml = proofs.length
+      ? '<h2 class="sec" id="proofs">可视化证明 <span class="en">PROOFS</span></h2>' +
+        '<div class="callout exam">' +
+          '<div class="co-title">🎬 本章必看：把证明拆成分步画面</div>' +
+          '<p>先拖动图形找到「平行 / 相等 / 抵消」的瞬间，再回来写标准证明。每一步都附「为什么成立」与考场写法。</p>' +
+          '<p style="margin-bottom:0">' + proofs.map(function (p) {
+            return '<a class="btn sm" style="margin:3px 6px 3px 0" href="proof.html?p=' + p.id + '">' + p.short + ' →</a>';
+          }).join("") + '</p>' +
+        '</div>'
+      : "";
+
     var prevHtml = prev
       ? '<a class="chapter-nav-link" href="chapter.html?ch=' + prev.id + '"><span>上一章</span><b>' + prev.no + " " + prev.title + "</b></a>"
       : "<span></span>";
@@ -81,6 +94,7 @@
       '<div class="toc">' +
         '<span class="toc-label">本章目录</span>' +
         '<a href="#lesson">知识块</a>' +
+        (proofs.length ? '<a href="#proofs">可视化证明</a>' : '') +
         '<a href="#examples">典型例题</a>' +
         '<a href="#formulas">公式清单</a>' +
         '<a href="#pitfalls">避坑</a>' +
@@ -94,6 +108,7 @@
 
       '<h2 class="sec" id="lesson">本章讲解 <span class="en">LESSON</span></h2>' +
       blocks +
+      proofHtml +
 
       '<h2 class="sec" id="examples">典型例题 <span class="en">EXAMPLES</span></h2>' +
       '<p class="muted">先遮住步骤自己做一遍，再对照。例题比章末题更重要，它决定你会不会「按步骤拿分」。</p>' +

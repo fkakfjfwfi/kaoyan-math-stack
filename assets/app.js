@@ -199,6 +199,7 @@
         '<span class="q-res"></span>' +
       '</div>' +
       '<div class="q-exp"><b>解析：</b>' + escapeHTML(q.exp) + '</div>' +
+      '<div class="q-sol"></div>' +
       '<button class="q-fav" type="button" title="收藏这道题">☆</button>';
     return card;
   }
@@ -335,7 +336,10 @@
       var ansBtn = $(".btn-ans", card);
       var retryBtn = $(".q-retry", card);
       var favBtn = $(".q-fav", card);
+      var solPanel = $(".q-sol", card);
+      var hasSol = !!(solPanel && window.SolutionCoach && window.SolutionCoach.has(q.id));
       var selected = null;
+      var lastSelected = null;
       var done = false;
 
       function paintSelected(value) {
@@ -365,6 +369,7 @@
         }
         if (ansBtn) ansBtn.textContent = "查看解析";
         if (retryBtn) retryBtn.hidden = false;
+        if (record && typeof record.d === "number") lastSelected = record.d;
         lockOptions();
         done = true;
       }
@@ -383,6 +388,7 @@
         opt.addEventListener("click", function () {
           if (done) return;
           selected = Number(opt.getAttribute("data-opt"));
+          lastSelected = selected;
           paintSelected(selected);
           if (res) {
             res.textContent = "已选择 " + "ABCD"[selected] + "，点「提交答案」判分";
@@ -407,8 +413,12 @@
 
       ansBtn.addEventListener("click", function () {
         if (done) {
-          exp.classList.toggle("show");
-          ansBtn.textContent = exp.classList.contains("show") ? "收起解析" : "查看解析";
+          var panel = hasSol && solPanel ? solPanel : exp;
+          if (panel === solPanel && !solPanel.dataset.built && window.SolutionCoach) {
+            window.SolutionCoach.show(solPanel, q, lastSelected == null ? q.answer : lastSelected);
+          }
+          panel.classList.toggle("show");
+          ansBtn.textContent = panel.classList.contains("show") ? "收起解析" : "查看解析";
           return;
         }
         if (selected === null) {
@@ -455,6 +465,11 @@
           res.className = "q-res " + (ok ? "good" : "bad");
         }
         exp.classList.add("show");
+        if (hasSol && solPanel && window.SolutionCoach) {
+          window.SolutionCoach.show(solPanel, q, selected);
+          solPanel.classList.add("show");
+          exp.classList.remove("show");
+        }
         ansBtn.textContent = "收起解析";
         lockOptions();
         done = true;
@@ -462,7 +477,8 @@
         refreshHud();
         if (typeof options.onChange === "function") options.onChange(records, questions);
         if (persistRecords) {
-          announce(ok ? "已保存 ✓" : "已保存 ✓ 已加入复习队列，1 天后到期");
+          if (ok) announce(hasSol ? "已保存 ✓ 下方已展开逐步解析" : "已保存 ✓");
+          else announce(hasSol ? "已保存 ✓ 已加入复习队列；下方已展开错因诊断" : "已保存 ✓ 已加入复习队列，1 天后到期");
         } else {
           announce(ok ? "已记录 ✓" : "已记录 ✓ 答错，提交诊断后查看弱项");
         }
@@ -481,6 +497,7 @@
             res.className = "q-res";
           }
           if (exp) exp.classList.remove("show");
+          if (hasSol && solPanel && window.SolutionCoach) window.SolutionCoach.hide(solPanel);
           if (ansBtn) ansBtn.textContent = "提交答案";
           retryBtn.hidden = true;
           if (options.allowRetry) {

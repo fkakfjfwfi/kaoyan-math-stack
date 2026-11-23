@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>练习场 · 80 题跨章组卷与 20 题诊断 | 研数</title>
-<meta name="description" content="考研数学一练习场：20 题零基础诊断、基础卷、提高卷、真题改编卷、全真模拟卷；80 题题库（含 20 题外部题库试跑），自动错题本、收藏、随机 10 题。">
+<meta name="description" content="考研数学一练习场：20 题零基础诊断、基础卷、提高卷、真题改编卷、全真模拟卷；80 题题库（含 20 题外部题库试跑），14 道高频题带逐步解析与选项级错因诊断，自动错题本、收藏、随机 10 题。">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%231b2430'/%3E%3Ctext x='50' y='71' font-size='60' text-anchor='middle' fill='%23f6f3ec' font-family='Georgia'%3E%E2%88%91%3C/text%3E%3C/svg%3E">
 <link rel="stylesheet" href="assets/style.css">
 <script>try{var t=JSON.parse(localStorage.getItem("yanshu.theme")||"null");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}</script>
@@ -20,6 +20,7 @@
     <a href="xiandai.html">线性代数</a>
     <a href="gailv.html">概率统计</a>
     <a href="formulas.html">公式速查</a>
+    <a href="proof.html">证明</a>
     <a href="practice.html">练习场</a>
     <a href="method.html">方法论</a>
     <a href="resources.html">资源</a>
@@ -32,7 +33,7 @@
     <p class="eyebrow">PRACTICE · 80 题</p>
     <h1>练习场：<span class="em">按卷刷，不按心情刷</span></h1>
     <p class="lede">先用 20 题诊断看清自己离 60 分有多远，再用内置四套卷逐层推进。题库与章节页共用，另收录 20 道外部题库试跑题；答错的题自动进错题本。</p>
-    <p class="tagline">80 题题库 · 20 题诊断 · 全真模拟 · 四套内置 + 收录试跑 · 错题复习</p>
+    <p class="tagline">80 题题库 · 20 题诊断 · 14 题交互题解 · 全真模拟 · 四套内置 + 收录试跑 · 错题复习</p>
   </header>
 
   <div class="callout exam">
@@ -67,6 +68,12 @@
     <div class="co-title">⏱ 全真模拟 · 150 分 / 180 分钟</div>
     <p>10 道单选 50 分 + 6 道填空 30 分 + 6 道解答 70 分，严格计时。选择/填空自动判分，解答题对答案后按步骤自评。建议基础线达标后每周一套。</p>
     <p style="margin-bottom:0"><a class="btn sm" href="mock.html">进入全真模拟 →</a></p>
+  </div>
+
+  <div class="callout">
+    <div class="co-title">🧠 交互题解：选错也能知道错在哪</div>
+    <p>题库中有 14 道高频题带「逐步解析」。提交答案后会自动展开：你选的选项对应哪类错因、正确解法的每一步在做什么、为什么可以这样做；其中 4 道还配有可拖拽图形（极限逼近、极坐标面积元、特征向量、正态相加）。看完图再回题目，把断掉的那一步补上。</p>
+    <p style="margin-bottom:0"><a class="btn ghost sm" href="proof.html">配套可视化证明 →</a></p>
   </div>
 
   <h2 class="sec" id="paperTitle">选择试卷 <span class="en">PAPERS</span></h2>
@@ -122,14 +129,16 @@
 
 <footer>
   <div class="footer-inner">
-    <p>研数 · 练习场 · 60 题 + 20 题诊断</p>
+    <p>研数 · 练习场 · 80 题 + 20 题诊断 + 14 题交互题解</p>
     <p class="small">错题本按题目 ID 保存，题干改写不会影响历史记录；诊断记录只存在于当前页面，不写入错题本。</p>
-    <div class="pagers"><a href="index.html">总览</a><a href="gaoshu-1.html">高数（上）</a><a href="method.html">备考方法论</a></div>
+    <div class="pagers"><a href="index.html">总览</a><a href="proof.html">可视化证明</a><a href="method.html">80 分路线</a></div>
   </div>
 </footer>
 
 <script src="assets/bank.js"></script>
 <script src="assets/bank-external.js"></script>
+<script src="assets/solution-data.js"></script>
+<script src="assets/solution-coach.js"></script>
 <script src="assets/app.js"></script>
 </body>
 </html>

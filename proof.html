@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>可视化证明 · 10 个考研高频证明的分步图解 | 研数</title>
+<meta name="description" content="考研数学一可视化证明播放器：零点/介值定理、罗尔、拉格朗日、柯西中值、泰勒、积分中值、变上限积分、格林公式、施密特正交化、实对称对角化；每步配可拖拽图形与「为什么成立」。">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%231b2430'/%3E%3Ctext x='50' y='71' font-size='60' text-anchor='middle' fill='%23f6f3ec' font-family='Georgia'%3E%E2%88%91%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="assets/style.css">
+<script>try{var t=JSON.parse(localStorage.getItem("yanshu.theme")||"null");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}</script>
+</head>
+<body>
+
+<nav class="topbar"><div class="topbar-inner">
+  <a class="logo" href="index.html"><span class="logo-mark">∑</span><span class="logo-text"><b>研数</b><small>数学一 · 301</small></span></a>
+  <div class="nav-links">
+    <a href="index.html">总览</a>
+    <a href="gaoshu-1.html">高数·上</a>
+    <a href="gaoshu-2.html">高数·下</a>
+    <a href="xiandai.html">线性代数</a>
+    <a href="gailv.html">概率统计</a>
+    <a href="formulas.html">公式速查</a>
+    <a href="proof.html">证明</a>
+    <a href="practice.html">练习场</a>
+    <a href="method.html">方法论</a>
+    <a href="resources.html">资源</a>
+  </div>
+  <button class="theme-btn" type="button" title="切换明暗主题" aria-label="切换明暗主题">🌙</button>
+</div></nav>
+
+<div class="wrap">
+  <header class="hero">
+    <p class="eyebrow">PROOF PLAYER · 10 个高频证明</p>
+    <h1>证明题：<span class="em">先看见，再写出来</span></h1>
+    <p class="lede">中值定理、泰勒、积分中值、格林公式、正交对角化——这些「证明」在书上常常只有几行逻辑。这里把每一步拆成画面：拖动参数，看区间怎么套、切线怎么转、网格怎么抵消、特征向量怎么对齐，再回到标准答题格式。</p>
+    <p class="tagline">10 个证明 · 45+ 步 · 8 个可拖拽图形 · 每步都有「为什么成立」</p>
+    <div class="hero-actions">
+      <a class="btn" href="#proofApp">开始播放 →</a>
+      <a class="btn ghost" href="practice.html">去做证明相关题</a>
+      <a class="btn ghost" href="method.html#eighty">看 80 分路线</a>
+    </div>
+  </header>
+
+  <div class="stat-row">
+    <div class="stat"><b>10</b><span>个高频证明</span></div>
+    <div class="stat"><b>45+</b><span>个拆解步骤</span></div>
+    <div class="stat"><b>8</b><span>种交互图形</span></div>
+    <div class="stat"><b>0</b><span>外部依赖</span></div>
+  </div>
+
+  <div class="callout exam">
+    <div class="co-title">📌 怎么用这一页</div>
+    <p style="margin-bottom:0">先选一个证明 → 点「下一步」逐步看图形变化 → 拖动下方滑块亲手找到「平行」「相等」「抵消」的瞬间 → 读该步的「为什么成立」→ 最后按「结论 + 考场写法」在纸上默写一遍。看懂 ≠ 会写，证明题的分在逻辑链上。</p>
+  </div>
+
+  <div id="proofApp">
+    <div class="proof-tabs" id="proofTabs"></div>
+
+    <section class="proof-card">
+      <div class="proof-head">
+        <div>
+          <div class="proof-tag" id="proofTag"></div>
+          <h2 id="proofTitle"></h2>
+          <p class="proof-goal" id="proofGoal"></p>
+        </div>
+        <a class="btn ghost sm" id="proofChapter" href="#">回对应章节 →</a>
+      </div>
+
+      <div class="proof-stage">
+        <canvas id="proofCanvas" class="proof-canvas" aria-label="证明图形"></canvas>
+      </div>
+
+      <div class="proof-controls">
+        <button type="button" id="proofPrev">← 上一步</button>
+        <button type="button" id="proofNext" class="primary">下一步 →</button>
+        <button type="button" id="proofPlay">▶ 自动播放</button>
+        <button type="button" id="proofReset">重来</button>
+        <span class="proof-counter" id="proofCounter">1 / 1</span>
+      </div>
+
+      <div class="proof-slider" id="proofSliderWrap">
+        <span id="proofParamLabel">参数</span>
+        <input type="range" id="proofParam" min="0" max="1" step="0.01" value="0">
+        <b id="proofParamVal">0</b>
+      </div>
+
+      <div class="proof-readout" id="proofReadout"></div>
+
+      <div class="proof-detail">
+        <div class="pd-name" id="proofDetailName"></div>
+        <div class="pd-math" id="proofDetailMath"></div>
+        <div class="proof-why" id="proofWhy"></div>
+      </div>
+
+      <div class="proof-steps" id="proofSteps"></div>
+
+      <div class="proof-foot">
+        <div class="proof-box takeaway">
+          <h4>✅ 一句话结论</h4>
+          <div id="proofConclusion"></div>
+        </div>
+        <div class="proof-box exam">
+          <h4>📝 考场怎么写</h4>
+          <div id="proofExam"></div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <h2 class="sec">证明题通用四步模板 <span class="en">PROOF TEMPLATE</span></h2>
+  <div class="steps">
+    <div class="step"><b>写条件。</b>把题目给的「连续、可导、端点值、单调」逐条摆出来，缺哪条就说明为什么不能用某个定理。</div>
+    <div class="step"><b>造辅助函数。</b>要证 f′(ξ)=k，就令 g(x)=f(x)−kx；要证含 f(ξ) 的等式，把 ξ 换成 x 再移项。辅助函数的端点值必须相等或异号。</div>
+    <div class="step"><b>点名定理。</b>写「由罗尔定理」「由零点定理」「由介值定理」，并核对三个条件，不能只写「显然」。</div>
+    <div class="step"><b>还原结论。</b>把辅助函数的 ξ 代回原式，写清 ξ 的所属区间（开区间还是闭区间）。</div>
+  </div>
+
+  <div class="callout">
+    <div class="co-title">🔗 证明与练习怎么配合</div>
+    <p style="margin-bottom:0">看完一个证明，去对应章节做 2—3 道章末题；再回练习场做「提高卷」与「真题改编卷」。题解里的「逐步解析 + 错因诊断」会指出你是在<b>条件、辅助函数、定理引用还是结论还原</b>上出错。证明题不要求刷量，要求每道都能独立复述逻辑链。</p>
+  </div>
+
+  <p class="center" style="margin-top:26px">
+    <a class="btn" href="practice.html">去练习场检验 →</a>
+    <a class="btn ghost" href="method.html#eighty">看 80 分路线</a>
+    <a class="btn ghost" href="formulas.html">公式速查</a>
+  </p>
+</div>
+
+<footer>
+  <div class="footer-inner">
+    <p>研数 · 可视化证明 · 数学一</p>
+    <p class="small">证明按考研大纲常见要求整理；图形用于建立直觉，正式作答仍需写全条件与定理名称。</p>
+    <div class="pagers"><a href="index.html">总览</a><a href="practice.html">练习场</a><a href="method.html">方法论</a></div>
+  </div>
+</footer>
+
+<script src="assets/app.js"></script>
+<script src="assets/proof-data.js"></script>
+<script src="assets/proof-page.js"></script>
+</body>
+</html>
