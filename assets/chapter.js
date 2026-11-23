@@ -78,6 +78,21 @@
         '</div>'
       : "";
 
+    // 本章对应的 18 讲精讲（lecture-data 提供）
+    var lectures = (window.MATH_LECTURES || []).filter(function (l) {
+      return (l.chapters || []).indexOf(c.id) >= 0;
+    });
+    var lectureHtml = lectures.length
+      ? '<h2 class="sec" id="lectures">系统精讲 <span class="en">18 LECTURES</span></h2>' +
+        '<div class="callout exam">' +
+          '<div class="co-title">📖 本章只是速览；要补到 120 分，按讲次学深</div>' +
+          '<p>对应讲义把概念、方法卡和例题讲透，每讲含 6～8 个题型方法与 4～7 道精讲例题。</p>' +
+          '<p style="margin-bottom:0">' + lectures.map(function (l) {
+            return '<a class="btn sm" style="margin:3px 6px 3px 0" href="lecture.html?l=' + l.id + '">第 ' + l.no + ' 讲 ' + l.title + ' →</a>';
+          }).join("") + '</p>' +
+        '</div>'
+      : "";
+
     // 本章对应的可视化证明（proof-data.js 提供）
     var proofs = (window.MATH_PROOFS || []).filter(function (p) { return p.chapter === c.id; });
     var proofHtml = proofs.length
@@ -114,6 +129,7 @@
       '<div class="toc">' +
         '<span class="toc-label">本章目录</span>' +
         '<a href="#logic">底层逻辑</a>' +
+        (lectures.length ? '<a href="#lectures">系统精讲</a>' : '') +
         '<a href="#lesson">知识块</a>' +
         (proofs.length ? '<a href="#proofs">可视化证明</a>' : '') +
         '<a href="#examples">典型例题</a>' +
@@ -127,6 +143,7 @@
         '<p style="margin-bottom:0">本章平均约 <b>' + c.score + ' 分</b>，重要度 ' + "★".repeat(c.stars) + '。先读人话导入和知识块，再动手做例题；不要直接跳到章末题。</p>' +
       '</div>' +
       logicHtml +
+      lectureHtml +
 
       '<h2 class="sec" id="lesson">本章讲解 <span class="en">LESSON</span></h2>' +
       blocks +

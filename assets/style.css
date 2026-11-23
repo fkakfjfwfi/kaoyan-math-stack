@@ -648,3 +648,68 @@ footer .pagers a:hover{border-color:var(--brand);color:var(--brand);text-decorat
   body{background:#fff}
   .card,.quiz,.lab,.hero{box-shadow:none}
 }
+
+/* ── 高数 18 讲 ── */
+.lec-shell{display:grid;grid-template-columns:252px minmax(0,1fr);gap:28px;align-items:start}
+.lec-side{position:sticky;top:74px;max-height:calc(100vh - 96px);overflow:auto;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px 10px;box-shadow:var(--shadow);font-size:12.5px}
+.lec-side-home{display:block;padding:6px 9px 9px;font-weight:700;color:var(--brand);border-bottom:1px solid var(--line);margin-bottom:8px}
+.lec-side-progress{font-size:11.5px;color:var(--ink-3);padding:0 9px 8px}
+.lec-side-group{margin-bottom:10px}
+.lec-side-part{font-size:10.5px;letter-spacing:.08em;color:var(--ink-3);padding:4px 9px;font-weight:700}
+.lec-side-link{display:flex;flex-wrap:wrap;align-items:baseline;gap:5px;padding:6px 9px;border-radius:8px;color:var(--ink-2);line-height:1.4}
+.lec-side-link span{font-size:10.5px;color:var(--ink-3);flex:none}
+.lec-side-link b{font-weight:600;font-size:12.5px;color:var(--ink)}
+.lec-side-link:hover{background:var(--brand-soft);text-decoration:none}
+.lec-side-link.active{background:var(--brand-soft)}
+.lec-side-link.active b{color:var(--brand)}
+.lec-side-done{font-style:normal;color:var(--green);font-size:11px;margin-left:auto}
+.lec-head{background:radial-gradient(circle at 92% 6%,var(--brand-soft) 0,transparent 46%),linear-gradient(135deg,var(--card),var(--bg-soft));border:1px solid var(--line);border-radius:20px;padding:28px 30px 26px;margin-bottom:18px}
+.lec-head h1{font-size:clamp(24px,3.2vw,34px);line-height:1.3;margin:6px 0 8px}
+.lec-head .lede{color:var(--ink-2);font-size:14.5px;max-width:760px}
+.lec-meta{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px;margin-top:16px}
+.lec-meta span{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:7px 11px;font-size:12px;color:var(--ink-2);line-height:1.55}
+.lec-meta b{display:block;color:var(--ink-3);font-size:10.5px;letter-spacing:.06em;margin-bottom:1px}
+.lec-progress{margin:22px 0 6px}
+.lec-progress-inner{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 18px;box-shadow:var(--shadow)}
+.lec-bar{height:8px;border-radius:6px;background:var(--bg-soft);overflow:hidden;margin:8px 0 7px}
+.lec-bar i{display:block;height:100%;background:linear-gradient(90deg,var(--brand),var(--accent));border-radius:6px;transition:width .3s}
+.lec-card p{font-size:13px}
+.lec-done{font-size:10.5px;color:var(--green);background:var(--green-soft);border-radius:7px;padding:1px 7px;vertical-align:middle;font-weight:600}
+.lec-tree{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:10px;margin:12px 0}
+.lec-tree-node{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:11px 14px}
+.lec-tree-node b{display:block;color:var(--brand);font-size:13.5px;margin-bottom:5px;font-family:var(--font-serif)}
+.lec-tree-node ul{margin:0;padding-left:17px;font-size:12.5px;color:var(--ink-2)}
+.lec-tree-node li{margin:2px 0}
+.lec-concept{margin:12px 0}
+.lec-concept h3{font-size:17px;margin:3px 0 8px}
+.lec-rich p{font-size:14px;color:var(--ink-2);margin-bottom:8px}
+.lec-rich p:last-child{margin-bottom:0}
+.lec-rich ul,.lec-rich ol{padding-left:20px;margin:6px 0 9px;font-size:14px;color:var(--ink-2)}
+.lec-rich li{margin:3px 0}
+.lec-methods{display:grid;gap:9px;margin:12px 0}
+.lec-method{background:var(--card);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.lec-method summary{display:flex;align-items:center;gap:9px;flex-wrap:wrap;padding:10px 14px;cursor:pointer;list-style:none;font-size:13.5px}
+.lec-method summary::-webkit-details-marker{display:none}
+.lec-method summary:hover{background:var(--card-2)}
+.lec-method summary b{font-size:13.5px;color:var(--ink)}
+.lec-signal{background:var(--accent-soft);color:var(--accent);border-radius:7px;padding:2px 8px;font-size:11.5px;font-weight:700}
+.lec-method-no{margin-left:auto;font-size:10.5px;color:var(--ink-3)}
+.lec-method-body{padding:0 14px 12px;border-top:1px solid var(--line)}
+.lec-why{background:var(--blue-soft);border-radius:9px;padding:8px 12px;font-size:13px;color:var(--ink-2);margin:10px 0}
+.lec-why b{color:var(--blue)}
+.lec-mini{font-size:12.5px;color:var(--ink-3);margin:6px 0 0}
+.lec-mini b{color:var(--ink-2)}
+.lec-example .lec-trap{background:var(--red-soft);border-radius:9px;padding:8px 12px;font-size:13px;color:var(--ink-2);margin:8px 0 0}
+.lec-trap b{color:var(--red)}
+.lec-list{padding-left:20px;margin:4px 0 0;font-size:13.5px;color:var(--ink-2)}
+.lec-list li{margin:4px 0}
+.lec-check{list-style:none;padding-left:0}
+.lec-links{display:flex;flex-wrap:wrap;gap:8px;margin:18px 0 0}
+@media (max-width:900px){
+  .lec-shell{grid-template-columns:1fr;gap:16px}
+  .lec-side{display:none}
+}
+@media (max-width:520px){
+  .lec-head{padding:22px 18px}
+  .lec-meta{grid-template-columns:1fr 1fr}
+}

@@ -44,6 +44,12 @@ vm.createContext(ctx);
   "assets/chapters/gailv.js",
   "assets/proof-data.js",
   "assets/reasoning-data.js",
+  "assets/lectures/l01-l03.js",
+  "assets/lectures/l04-l06.js",
+  "assets/lectures/l07-l09.js",
+  "assets/lectures/l10-l12.js",
+  "assets/lectures/l13-l15.js",
+  "assets/lectures/l16-l18.js",
   "assets/solution-data.js",
   "assets/solution-why.js"
 ].forEach((f) => load(f, ctx));
@@ -54,6 +60,7 @@ const proofs = ctx.window.MATH_PROOFS || [];
 const solutions = ctx.window.MATH_SOLUTIONS || {};
 const reasoning = ctx.window.MATH_REASONING || {};
 const solutionWhy = ctx.window.MATH_SOLUTION_WHY || {};
+const lectures = ctx.window.MATH_LECTURES || [];
 
 /* ── 题库 ── */
 const ids = new Set();
@@ -151,6 +158,51 @@ solIds.forEach((id) => {
 });
 notes.push(`底层逻辑 ${Object.keys(reasoning).length} 章；题解 why ${whyIds.length} 题`);
 
+/* ── 高数 18 讲精讲 ── */
+const lectureIds = new Set();
+lectures.forEach((l, i) => {
+  const where = `第 ${i + 1} 讲（${l.id || "无 id"}）`;
+  if (!/^l\d+$/.test(l.id || "")) fail(`${where} id 非法`);
+  if (lectureIds.has(l.id)) fail(`${where} id 重复`);
+  lectureIds.add(l.id);
+  if (l.no !== i + 1) fail(`${where} 讲次应为 ${i + 1}，实际 ${l.no}`);
+  ["part", "title", "intro"].forEach((k) => {
+    if (!l[k]) fail(`${where} 缺少 ${k}`);
+  });
+  if (!Number.isInteger(l.bookPage) || l.bookPage < 1) fail(`${where} bookPage 非法`);
+  if (!Array.isArray(l.chapters) || !l.chapters.length) fail(`${where} 未关联章节`);
+  (l.chapters || []).forEach((id) => {
+    if (!chapters[id]) fail(`${where} 关联章节不存在：${id}`);
+  });
+  ["score", "types", "freq", "note"].forEach((k) => {
+    if (!l.exam || !l.exam[k]) fail(`${where} exam 缺字段：${k}`);
+  });
+  if (!Array.isArray(l.tree) || l.tree.length < 4) fail(`${where} 知识结构少于 4 块`);
+  if (!Array.isArray(l.concepts) || l.concepts.length < 3) fail(`${where} 概念精讲少于 3 段`);
+  (l.concepts || []).forEach((c, j) => {
+    if (!c.title || !c.html) fail(`${where} 概念 ${j + 1} 不完整`);
+  });
+  if (!Array.isArray(l.methods) || l.methods.length < 5) fail(`${where} 方法卡少于 5 个`);
+  (l.methods || []).forEach((m, j) => {
+    ["signal", "name", "why"].forEach((k) => {
+      if (!m[k]) fail(`${where} 方法 ${j + 1} 缺字段：${k}`);
+    });
+    if (!Array.isArray(m.steps) || m.steps.length < 2) fail(`${where} 方法 ${j + 1} 步骤少于 2 步`);
+  });
+  if (!Array.isArray(l.examples) || l.examples.length < 4) fail(`${where} 例题少于 4 道`);
+  (l.examples || []).forEach((e, j) => {
+    ["title", "question", "think", "answer", "trap"].forEach((k) => {
+      if (!e[k]) fail(`${where} 例题 ${j + 1} 缺字段：${k}`);
+    });
+    if (!Array.isArray(e.steps) || e.steps.length < 2) fail(`${where} 例题 ${j + 1} 步骤少于 2 步`);
+  });
+  if (!Array.isArray(l.conclusions) || l.conclusions.length < 4) fail(`${where} 二级结论少于 4 条`);
+  if (!Array.isArray(l.pitfalls) || l.pitfalls.length < 4) fail(`${where} 避坑少于 4 条`);
+  if (!Array.isArray(l.selfCheck) || l.selfCheck.length < 4) fail(`${where} 自测少于 4 条`);
+});
+if (lectures.length !== 18) fail(`高数精讲应为 18 讲，实际 ${lectures.length}`);
+notes.push(`高数精讲 ${lectures.length} 讲，${lectures.reduce((n, l) => n + (l.methods || []).length, 0)} 个方法卡，${lectures.reduce((n, l) => n + (l.examples || []).length, 0)} 道例题`);
+
 /* ── HTML 内部链接 ── */
 const htmlFiles = fs.readdirSync(root).filter((f) => f.endsWith(".html"));
 const pageSet = new Set(htmlFiles);
@@ -167,8 +219,12 @@ htmlFiles.forEach((file) => {
   for (const m of html.matchAll(/href="proof\.html\?p=([a-z-]+)"/g)) {
     if (!proofIds.has(m[1])) fail(`${file} 链接到不存在的证明：${m[1]}`);
   }
+  for (const m of html.matchAll(/href="lecture\.html\?l=(l\d+)"/g)) {
+    if (!lectureIds.has(m[1])) fail(`${file} 链接到不存在的讲次：${m[1]}`);
+  }
   if (!html.includes('href="proof.html"')) fail(`${file} 导航缺少「证明」入口`);
   if (!html.includes('href="practice.html#real"')) fail(`${file} 导航缺少「真题」入口`);
+  if (!html.includes('href="lectures.html"')) fail(`${file} 导航缺少「高数18讲」入口`);
 });
 
 /* ── 脚本接入顺序 ── */
@@ -195,6 +251,24 @@ const reasonAt = chapterHtml.indexOf("assets/reasoning-data.js");
 const chapterAt = chapterHtml.indexOf("assets/chapter.js");
 if (reasonAt < 0) fail("chapter.html 未接入 reasoning-data.js");
 if (reasonAt > chapterAt) fail("reasoning-data.js 必须在 chapter.js 之前");
+const lectureAt = chapterHtml.indexOf("assets/lectures/l01-l03.js");
+if (lectureAt < 0) fail("chapter.html 未接入 18 讲数据");
+if (lectureAt > chapterAt) fail("18 讲数据必须在 chapter.js 之前");
+
+const lectureHtml = read("lecture.html");
+if (lectureHtml.indexOf("assets/chapters/gaoshu-1.js") < 0) {
+  fail("lecture.html 未加载章节数据，讲次页无法生成章节链接");
+}
+["lectures.html", "lecture.html"].forEach((file) => {
+  const html = read(file);
+  const pageAt = html.indexOf("assets/lecture-page.js");
+  if (pageAt < 0) fail(`${file} 未接入 lecture-page.js`);
+  ["l01-l03", "l04-l06", "l07-l09", "l10-l12", "l13-l15", "l16-l18"].forEach((name) => {
+    const at = html.indexOf(`assets/lectures/${name}.js`);
+    if (at < 0) fail(`${file} 未加载 ${name}.js`);
+    if (at > pageAt) fail(`${file} 的 ${name}.js 必须在 lecture-page.js 之前`);
+  });
+});
 
 /* ── 输出 ── */
 notes.forEach((n) => console.log("· " + n));
