@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>研数 · 考研数学一学习站（2027）</title>
-<meta name="description" content="2027 考研数学一学习站：22 章知识地图、6 个交互实验室、42 题分级练习、公式速查、备考方法论与错题本。">
+<meta name="description" content="2027 考研数学一学习站：22 章知识地图、6 个交互实验室、60 题练习、20 题诊断、公式速查、备考方法论与错题本。">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%231b2430'/%3E%3Ctext x='50' y='71' font-size='60' text-anchor='middle' fill='%23f6f3ec' font-family='Georgia'%3E%E2%88%91%3C/text%3E%3C/svg%3E">
 <link rel="stylesheet" href="assets/style.css">
 <script>try{var t=JSON.parse(localStorage.getItem("yanshu.theme")||"null");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}</script>
@@ -32,7 +32,7 @@
     <p class="eyebrow">2027 考研 · 数学一 · 科目代码 301</p>
     <h1>把数学一，<span class="em">画出来再算出来</span></h1>
     <p class="lede">这是为 2027 数一考生准备的学习站。每个概念先说人话，再用可拖拽的实验室把「极限怎么逼近、积分怎么累加、矩阵怎么变形、样本均值怎么变正态」演出来，最后落到课程式结构：考点、例题、避坑、练习、打卡。</p>
-    <p class="tagline">4 大模块 · 22 章 · 6 个交互实验室 · 42 题 · 45 条公式 · 30 项打卡</p>
+    <p class="tagline">4 大模块 · 22 章 · 6 个交互实验室 · 60 题 · 20 题诊断 · 45 条公式 · 30 项打卡</p>
     <div class="hero-actions">
       <a class="btn" href="gaoshu-1.html">从高数（上）开始 →</a>
       <a class="btn ghost" href="practice.html">去练习场</a>
@@ -62,9 +62,15 @@
     <div class="stat"><b>150</b><span>满分 · 180 分钟</span></div>
     <div class="stat"><b>22</b><span>章 · 对齐数一大纲</span></div>
     <div class="stat"><b>6</b><span>个交互实验室</span></div>
-    <div class="stat"><b>42</b><span>道分级练习</span></div>
+    <div class="stat"><b>60</b><span>道分级练习</span></div>
     <div class="stat"><b>45</b><span>条公式速查</span></div>
     <div class="stat"><b id="cdDays">--</b><span>天 · 距数学考试</span></div>
+  </div>
+
+  <div class="callout exam">
+    <div class="co-title">📌 先自检：你现在离 60 分有多远？</div>
+    <p>20 题诊断，按数一分值结构覆盖三科，每题 5 分，满分 100。≥60 分说明基础题达到及格线，可进入真题套卷；低于 60 分会列出弱项章节和补齐入口。它是抽样自检，不是 150 分全真卷。</p>
+    <p style="margin-bottom:0"><a class="btn sm" href="practice.html#diagnostic">开始 20 题诊断 →</a></p>
   </div>
 
   <h2 class="sec">为什么这么学 <span class="en">WHY THIS WAY</span></h2>
@@ -96,33 +102,33 @@
       <h3>极限、微分、积分</h3>
       <p>函数极限与连续、一元微分学、一元积分学。这是整张卷子的地基，也是后面多元与级数的工具库。</p>
       <div class="chips"><span class="chip">七种未定式</span><span class="chip">中值定理</span><span class="chip">变限积分</span><span class="chip hot">选填高频</span></div>
-      <div class="ch-wave">🔬 极限逼近器 + 黎曼和 · 9 题 · 6 项打卡</div>
+      <div class="ch-wave">🔬 极限逼近器 + 黎曼和 · 12 题 · 6 项打卡</div>
     </a>
     <a class="card clickable" href="gaoshu-2.html">
       <span class="ch-num">模块 2 · 高数（下）</span>
       <h3>空间、多元、级数、方程</h3>
       <p>向量代数与空间解析几何、多元微分、多元积分、无穷级数、常微分方程。数一独有考点集中在这里。</p>
       <div class="chips"><span class="chip">三大公式</span><span class="chip">幂级数求和</span><span class="chip">傅里叶</span><span class="chip hot">大题主战场</span></div>
-      <div class="ch-wave">🔬 极坐标面积元 + 幂级数逼近 · 12 题 · 6 项打卡</div>
+      <div class="ch-wave">🔬 极坐标面积元 + 幂级数逼近 · 18 题 · 6 项打卡</div>
     </a>
     <a class="card clickable" href="xiandai.html">
       <span class="ch-num">模块 3 · 线性代数</span>
       <h3>行列式到二次型</h3>
       <p>行列式、矩阵、向量、方程组、特征值、二次型。六章一条线：秩是总纲，方程组与特征值是落点。</p>
       <div class="chips"><span class="chip">秩</span><span class="chip">基础解系</span><span class="chip">相似对角化</span><span class="chip hot">大题稳定</span></div>
-      <div class="ch-wave">🔬 矩阵变换与特征向量 · 10 题 · 6 项打卡</div>
+      <div class="ch-wave">🔬 矩阵变换与特征向量 · 13 题 · 6 项打卡</div>
     </a>
     <a class="card clickable" href="gailv.html">
       <span class="ch-num">模块 4 · 概率统计</span>
       <h3>从事件到假设检验</h3>
       <p>随机事件、一维与二维分布、数字特征、大数定律与 CLT、统计概念、参数估计、假设检验。</p>
       <div class="chips"><span class="chip">二维分布</span><span class="chip">数字特征</span><span class="chip">最大似然</span><span class="chip hot">计算套路固定</span></div>
-      <div class="ch-wave">🔬 中心极限定理 · 11 题 · 6 项打卡</div>
+      <div class="ch-wave">🔬 中心极限定理 · 17 题 · 6 项打卡</div>
     </a>
     <a class="card clickable" href="practice.html">
       <span class="ch-num">跨章 · 练习场</span>
       <h3>四套卷 + 错题本</h3>
-      <p>42 题题库自动汇总：基础卷、提高卷、真题改编卷、全真模拟卷。答错自动进错题本，支持收藏与随机 10 题。</p>
+      <p>60 题题库自动汇总：基础卷、提高卷、真题改编卷、全真模拟卷。答错自动进错题本，支持收藏与随机 10 题。</p>
       <div class="chips"><span class="chip new">跨章组卷</span><span class="chip">错题本</span><span class="chip">收藏</span><span class="chip">随机抽题</span></div>
       <div class="ch-wave">建议每学完一章来一次「基础卷」自测</div>
     </a>

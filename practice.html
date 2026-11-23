@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>练习场 · 42 题跨章组卷 | 研数</title>
-<meta name="description" content="考研数学一练习场：基础卷、提高卷、真题改编卷、全真模拟卷；42 题题库，自动错题本、收藏、随机 10 题，进度保存在本机。">
+<title>练习场 · 60 题跨章组卷与 20 题诊断 | 研数</title>
+<meta name="description" content="考研数学一练习场：20 题零基础诊断、基础卷、提高卷、真题改编卷、全真模拟卷；60 题题库，自动错题本、收藏、随机 10 题。">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%231b2430'/%3E%3Ctext x='50' y='71' font-size='60' text-anchor='middle' fill='%23f6f3ec' font-family='Georgia'%3E%E2%88%91%3C/text%3E%3C/svg%3E">
 <link rel="stylesheet" href="assets/style.css">
 <script>try{var t=JSON.parse(localStorage.getItem("yanshu.theme")||"null");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}</script>
@@ -29,18 +29,29 @@
 
 <div class="wrap">
   <header class="hero">
-    <p class="eyebrow">PRACTICE · 42 题</p>
+    <p class="eyebrow">PRACTICE · 60 题</p>
     <h1>练习场：<span class="em">按卷刷，不按心情刷</span></h1>
-    <p class="lede">四套卷覆盖基础、提高、真题改编与全真模拟。题库与章节页共用，答错的题自动进错题本；收藏、只看错题、随机 10 题都在 HUD 里。</p>
-    <p class="tagline">42 题题库 · 四套组卷 · 错题本 · 收藏 · 随机 10 题</p>
+    <p class="lede">先用 20 题诊断看清自己离 60 分有多远，再用四套卷逐层推进。题库与章节页共用，答错的题自动进错题本；收藏、只看错题、随机 10 题都在 HUD 里。</p>
+    <p class="tagline">60 题题库 · 20 题诊断 · 四套组卷 · 错题本 · 收藏</p>
   </header>
 
   <div class="callout exam">
     <div class="co-title">📌 怎么用最有效</div>
-    <p style="margin-bottom:0">学完一章 → 做该章章末题 → 来练习场做「基础卷」巩固 → 二轮做「提高卷 + 真题改编卷」→ 考前用「全真模拟卷」限时。错题不要只看答案，回到对应章节把概念/公式重写一遍。</p>
+    <p style="margin-bottom:0">先做 20 题诊断 → 按弱项回模块页补例题 → 做「基础卷」巩固 → 二轮做「提高卷 + 真题改编卷」→ 考前用「全真模拟卷」限时。错题不要只看答案，回到对应章节把概念/公式重写一遍。</p>
   </div>
 
-  <h2 class="sec">选择试卷 <span class="en">PAPERS</span></h2>
+  <section class="diagnostic" id="diagnostic">
+    <div class="diag-kicker">零基础自检 · 20 题 · 满分 100</div>
+    <h2>先测一下：你现在离 60 分有多远？</h2>
+    <p>20 道选择题，按数一分值结构覆盖三科：高数 12 题、线代 4 题、概率 4 题，每题 5 分。建议 40 分钟独立完成、不查资料。它是抽样自检，不是 150 分全真卷；≥60 分说明基础题达到及格线，可以进入真题套卷；低于 60 分会列出弱项章节和补齐入口。</p>
+    <div class="diag-actions">
+      <button class="btn" id="startDiagnostic" type="button">开始 20 题诊断 →</button>
+      <span class="muted small">不写入错题本，可反复测；若已刷过题库，分数会偏高，建议作为阶段复测</span>
+    </div>
+    <div id="diagnosticResult" aria-live="polite" hidden></div>
+  </section>
+
+  <h2 class="sec" id="paperTitle">选择试卷 <span class="en">PAPERS</span></h2>
   <div class="paper-grid" id="paperGrid">
     <button class="paper-card on" data-paper="basic" type="button">
       <span class="pc-title">基础卷</span>
@@ -88,8 +99,8 @@
 
 <footer>
   <div class="footer-inner">
-    <p>研数 · 练习场 · 42 题</p>
-    <p class="small">错题本按题目 ID 保存，题干改写不会影响历史记录；换浏览器或清缓存会重置。</p>
+    <p>研数 · 练习场 · 60 题 + 20 题诊断</p>
+    <p class="small">错题本按题目 ID 保存，题干改写不会影响历史记录；诊断记录只存在于当前页面，不写入错题本。</p>
     <div class="pagers"><a href="index.html">总览</a><a href="gaoshu-1.html">高数（上）</a><a href="method.html">备考方法论</a></div>
   </div>
 </footer>

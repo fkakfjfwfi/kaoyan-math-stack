@@ -139,6 +139,24 @@
   var LEVEL_LABEL = { basic: "基础", mid: "提高", real: "真题改编" };
   var SUBJECT_LABEL = { 高数: "高等数学", 线代: "线性代数", 概率: "概率统计" };
 
+  // 20 题诊断：12 高数 + 4 线代 + 4 概率，每题 5 分，60 分达标
+  var DIAGNOSTIC_IDS = [
+    "g1-1", "g1-2", "g2-1", "g2-2", "g3-1", "g3-3",
+    "g5-1", "g6-1", "g6-2", "g6-5", "g7-1", "g8-1",
+    "x2-1", "x4-1", "x5-1", "x6-2",
+    "p1-1", "p2-1", "p3-1", "p4-1"
+  ];
+
+  function chapterLink(chapterId) {
+    var n = Number(chapterId.slice(1));
+    if (chapterId.charAt(0) === "g") {
+      return n <= 3 ? "gaoshu-1.html#s" + n : "gaoshu-2.html#s" + (n - 3);
+    }
+    if (chapterId.charAt(0) === "x") return "xiandai.html#s" + n;
+    if (chapterId.charAt(0) === "p") return "gailv.html#s" + n;
+    return "index.html";
+  }
+
   function buildCard(q, index) {
     var level = LEVEL_LABEL[q.level] || "练习";
     var options = q.options.map(function (opt, i) {
@@ -166,7 +184,10 @@
     return card;
   }
 
-  function mountQuiz(container, questions) {
+  function mountQuiz(container, questions, options) {
+    options = options || {};
+    var records = options.records || qstats;
+    var persistRecords = options.persist !== false;
     container.innerHTML = "";
     if (!questions || !questions.length) {
       container.innerHTML = '<div class="quiz-empty">当前筛选下没有题目，换一套卷或切换科目试试。</div>';
@@ -181,7 +202,7 @@
         '<span>正确率 <b class="hud-acc">—</b></span>' +
         '<span class="hud-wrong">错题 <b>0</b></span>' +
         '<span class="hud-fav">收藏 <b>0</b></span>' +
-        '<span class="hud-auto">进度自动保存在本机</span>' +
+        '<span class="hud-auto">' + (persistRecords ? "进度自动保存在本机" : "诊断模式 · 不写入错题本") + '</span>' +
       '</div>' +
       '<div class="hud-actions">' +
         '<button type="button" data-hud="wrong">只看错题</button>' +
@@ -209,7 +230,7 @@
     var msgTimer = null;
 
     function recOf(q) {
-      var r = qstats[q.id];
+      var r = records[q.id];
       return r && typeof r === "object" ? r : null;
     }
 
@@ -369,8 +390,8 @@
           return;
         }
         var ok = selected === q.answer;
-        qstats[q.id] = { r: ok ? 1 : 0, d: selected };
-        persistQS();
+        records[q.id] = { r: ok ? 1 : 0, d: selected };
+        if (persistRecords) persistQS();
         opts.forEach(function (o) {
           var value = Number(o.getAttribute("data-opt"));
           o.classList.toggle("right", value === q.answer);
@@ -385,7 +406,12 @@
         lockOptions();
         done = true;
         refreshHud();
-        announce(ok ? "已保存 ✓" : "已保存 ✓ 并收入错题本，可点「只看错题」重做");
+        if (typeof options.onChange === "function") options.onChange(records, questions);
+        if (persistRecords) {
+          announce(ok ? "已保存 ✓" : "已保存 ✓ 并收入错题本，可点「只看错题」重做");
+        } else {
+          announce(ok ? "已记录 ✓" : "已记录 ✓ 答错，提交诊断后查看弱项");
+        }
       });
     });
 
@@ -395,15 +421,16 @@
       var m = btn.getAttribute("data-hud");
       if (m === "reset") {
         if (!confirm("确定清空当前这一组题的答题进度？收藏不受影响。")) return;
-        questions.forEach(function (q) { delete qstats[q.id]; });
-        persistQS();
-        mountQuiz(container, questions);
+        questions.forEach(function (q) { delete records[q.id]; });
+        if (persistRecords) persistQS();
+        mountQuiz(container, questions, options);
         return;
       }
       applyMode(m);
     });
 
     refreshHud();
+    if (typeof options.onChange === "function") options.onChange(records, questions);
   }
 
   /* ── 章节页自动挂载 ── */
@@ -471,17 +498,177 @@
 
     var state = { paper: "basic", subject: "全部" };
     var current = [];
+    var filter = document.getElementById("subjectFilter");
+    var paperTitle = document.getElementById("paperTitle");
+    var diagBox = document.getElementById("diagnostic");
+    var diagResult = document.getElementById("diagnosticResult");
+    var diagState = { active: false, submitted: false, questions: [], records: {} };
+
+    function updateBankMsg(text) {
+      var msg = document.getElementById("bankMsg");
+      if (msg) msg.textContent = text;
+    }
 
     function mountCurrent() {
       current = buildPaper(state.paper, state.subject);
       mountQuiz(target, current);
       var meta = PAPERS[state.paper];
-      var msg = document.getElementById("bankMsg");
-      if (msg) {
-        var subjectText = state.subject === "全部" ? "三科混合" : (SUBJECT_LABEL[state.subject] || state.subject);
-        msg.textContent = meta.title + " · " + subjectText +
-          " · 共 " + current.length + " 题 · 建议 " + meta.minutes + " 分钟";
+      var subjectText = state.subject === "全部" ? "三科混合" : (SUBJECT_LABEL[state.subject] || state.subject);
+      updateBankMsg(meta.title + " · " + subjectText + " · 共 " + current.length + " 题 · 建议 " + meta.minutes + " 分钟");
+    }
+
+    function setDiagMode(on) {
+      if (grid) grid.style.display = on ? "none" : "";
+      if (filter) filter.style.display = on ? "none" : "";
+      if (paperTitle) paperTitle.style.display = on ? "none" : "";
+      if (diagBox) diagBox.classList.toggle("is-active", on);
+    }
+
+    function setDiagLive(records) {
+      var answered = 0;
+      var correct = 0;
+      diagState.questions.forEach(function (q) {
+        var r = records[q.id];
+        if (r && (r.r === 0 || r.r === 1)) {
+          answered += 1;
+          if (r.r === 1) correct += 1;
+        }
+      });
+      var a = document.getElementById("diagAnswered");
+      var c = document.getElementById("diagCorrect");
+      var s = document.getElementById("diagScore");
+      if (a) a.textContent = String(answered);
+      if (c) c.textContent = String(correct);
+      if (s) s.textContent = String(correct * 5);
+      var report = document.getElementById("diagReport");
+      if (report && report.querySelector(".diag-warn")) report.innerHTML = "";
+    }
+
+    function startDiagnostic() {
+      var bank = window.MATH_BANK || [];
+      var byId = {};
+      bank.forEach(function (q) { byId[q.id] = q; });
+      diagState.questions = DIAGNOSTIC_IDS.map(function (id) { return byId[id]; }).filter(Boolean);
+      if (diagState.questions.length !== DIAGNOSTIC_IDS.length) {
+        updateBankMsg("诊断题库加载不完整，请刷新页面后重试");
+        return;
       }
+      diagState.records = {};
+      diagState.active = true;
+      diagState.submitted = false;
+      setDiagMode(true);
+      if (diagResult) {
+        diagResult.hidden = false;
+        diagResult.innerHTML =
+          '<div class="diag-live">' +
+            '<span>已答 <b id="diagAnswered">0</b> / ' + diagState.questions.length + '</span>' +
+            '<span>正确 <b id="diagCorrect">0</b></span>' +
+            '<span>当前得分 <b id="diagScore">0</b> / 100</span>' +
+          '</div>' +
+          '<div class="diag-actions">' +
+            '<button class="btn sm" id="submitDiagnostic" type="button">提交诊断</button>' +
+            '<button class="btn ghost sm" id="exitDiagnostic" type="button">退出诊断</button>' +
+          '</div>' +
+          '<div id="diagReport" class="diag-report" aria-live="polite"></div>';
+        var submit = document.getElementById("submitDiagnostic");
+        var exit = document.getElementById("exitDiagnostic");
+        if (submit) submit.addEventListener("click", submitDiagnostic);
+        if (exit) exit.addEventListener("click", exitDiagnostic);
+      }
+      mountQuiz(target, diagState.questions, {
+        records: diagState.records,
+        persist: false,
+        onChange: setDiagLive
+      });
+      var bottom = document.createElement("div");
+      bottom.className = "diag-bottom";
+      bottom.innerHTML = '<button class="btn" id="submitDiagnosticBottom" type="button">提交诊断</button>';
+      target.appendChild(bottom);
+      var bottomBtn = document.getElementById("submitDiagnosticBottom");
+      if (bottomBtn) bottomBtn.addEventListener("click", submitDiagnostic);
+      updateBankMsg("零基础诊断 · 20 题 · 每题 5 分 · 满分 100");
+      var anchor = document.getElementById("bankAnchor");
+      if (anchor) anchor.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+
+    function submitDiagnostic() {
+      if (!diagState.active) return;
+      var report = document.getElementById("diagReport");
+      if (!report) return;
+      var answered = 0;
+      var correct = 0;
+      diagState.questions.forEach(function (q) {
+        var r = diagState.records[q.id];
+        if (r && (r.r === 0 || r.r === 1)) {
+          answered += 1;
+          if (r.r === 1) correct += 1;
+        }
+      });
+      if (answered < diagState.questions.length) {
+        report.innerHTML = '<p class="diag-warn">还有 ' + (diagState.questions.length - answered) + ' 题未答，先完成再提交诊断。</p>';
+        return;
+      }
+
+      var score = correct * 5;
+      var pass = score >= 60;
+      var level = score >= 90 ? "冲高分" : score >= 75 ? "较稳" : score >= 60 ? "基础达标" : "未达 60 分线";
+      var subjectOrder = ["高数", "线代", "概率"];
+      var stats = {};
+      subjectOrder.forEach(function (s) { stats[s] = { total: 0, correct: 0 }; });
+      var weakMap = {};
+      diagState.questions.forEach(function (q) {
+        if (!stats[q.subject]) stats[q.subject] = { total: 0, correct: 0 };
+        stats[q.subject].total += 1;
+        var r = diagState.records[q.id];
+        if (r && r.r === 1) {
+          stats[q.subject].correct += 1;
+        } else {
+          if (!weakMap[q.chapterId]) weakMap[q.chapterId] = { id: q.chapterId, chapter: q.chapter, count: 0 };
+          weakMap[q.chapterId].count += 1;
+        }
+      });
+      var weakList = Object.keys(weakMap).map(function (k) { return weakMap[k]; }).sort(function (a, b) { return b.count - a.count; });
+      var breakdown = subjectOrder.map(function (s) {
+        return '<div class="diag-sub"><b>' + SUBJECT_LABEL[s] + '</b><span>' + stats[s].correct + ' / ' + stats[s].total + ' 题</span></div>';
+      }).join('');
+      var advice = score >= 75
+        ? "基础线已经很稳。下一步用全真模拟卷限时训练，重点练时间分配和步骤书写。"
+        : score >= 60
+          ? "已达到 60 分基础线。接下来用基础卷 + 提高卷把正确率稳定在 70% 以上，再上真题套卷。"
+          : "还没到 60 分。先按下面的弱项章节回到模块页，把例题和公式重做一遍，再回来重测。";
+      var weakHtml = weakList.length
+        ? '<h4>优先补这些章节</h4><ul>' + weakList.map(function (w) {
+            return '<li><a href="' + chapterLink(w.id) + '">' + escapeHTML(w.chapter) + '</a><span>错 ' + w.count + ' 题</span></li>';
+          }).join('') + '</ul>'
+        : '<p class="diag-ok">全对。下一步直接去全真模拟卷或真题套卷。</p>';
+
+      report.innerHTML =
+        '<div class="diag-score ' + (pass ? "pass" : "fail") + '">' +
+          '<b>' + score + '</b><span>/100</span><em>' + level + '</em>' +
+        '</div>' +
+        '<div class="diag-breakdown">' + breakdown + '</div>' +
+        '<div class="diag-weak">' + weakHtml + '</div>' +
+        '<div class="diag-advice">' + advice + '</div>' +
+        '<div class="diag-actions">' +
+          '<button class="btn sm" id="retryDiagnostic" type="button">重新诊断</button>' +
+          '<button class="btn ghost sm" id="exitDiagnostic2" type="button">回到组卷</button>' +
+        '</div>';
+      var retry = document.getElementById("retryDiagnostic");
+      var exit2 = document.getElementById("exitDiagnostic2");
+      if (retry) retry.addEventListener("click", startDiagnostic);
+      if (exit2) exit2.addEventListener("click", exitDiagnostic);
+      diagState.submitted = true;
+    }
+
+    function exitDiagnostic() {
+      diagState.active = false;
+      diagState.submitted = false;
+      if (diagResult) {
+        diagResult.hidden = true;
+        diagResult.innerHTML = "";
+      }
+      setDiagMode(false);
+      mountCurrent();
     }
 
     $$(".paper-card", grid).forEach(function (card) {
@@ -494,7 +681,6 @@
       });
     });
 
-    var filter = document.getElementById("subjectFilter");
     if (filter) {
       $$("button", filter).forEach(function (btn) {
         btn.addEventListener("click", function () {
@@ -505,7 +691,11 @@
       });
     }
 
+    var startBtn = document.getElementById("startDiagnostic");
+    if (startBtn) startBtn.addEventListener("click", startDiagnostic);
+
     mountCurrent();
+    if (location.hash === "#diagnostic") startDiagnostic();
   }
 
   /* ── 公式速查 ── */
