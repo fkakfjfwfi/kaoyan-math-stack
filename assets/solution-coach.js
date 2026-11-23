@@ -3,6 +3,7 @@
   "use strict";
 
   var DATA = window.MATH_SOLUTIONS || {};
+  var WHY = window.MATH_SOLUTION_WHY || {};
 
   function esc(v) {
     return String(v == null ? "" : v)
@@ -267,20 +268,47 @@
       return '<li class="sol-step"><span class="ss-num">' + (i + 1) + '</span><span><b>' + esc(s.name) + '</b>：' + esc(s.body) +
         (s.why ? '<span class="ss-why">' + esc(s.why) + '</span>' : "") + "</span></li>";
     }).join("");
+    var why = WHY[q.id];
+    var whyHtml = why
+      ? '<div class="sol-why">' +
+          '<div class="wy-title">为什么这样想</div>' +
+          '<div class="wy-row"><span class="wy-label">题目信号</span><span class="wy-text">' + esc(why.signal) + '</span></div>' +
+          '<div class="wy-row"><span class="wy-label">底层原理</span><span class="wy-text">' + esc(why.principle) + '</span></div>' +
+          '<div class="wy-row"><span class="wy-label">方法取舍</span><span class="wy-text">' + esc(why.decision) + '</span></div>' +
+        '</div>'
+      : "";
+    var repairHtml = why
+      ? '<div class="sol-repair"><b>错因修复：</b>' + esc(why.repair) + '</div>' +
+        '<div class="sol-transfer"><b>迁移：</b>' + esc(why.transfer) + '</div>'
+      : "";
     var chapterLink = data.link ? '<div class="sol-link">回 <a href="chapter.html?ch=' + esc(data.link) +
-      '">对应章节</a> 重看知识块；也可去 <a href="proof.html">可视化证明</a> 补底层逻辑。</div>' : "";
+      '">对应章节</a> 重看「底层逻辑」；也可去 <a href="proof.html">可视化证明</a> 补为什么。</div>' : "";
     panel.innerHTML =
       '<div class="sol-head">逐步解析 · 错因诊断 <span>本题收录于「交互题解」</span></div>' +
       '<div class="sol-body">' +
         '<div class="sol-verdict ' + (correct || selected == null ? "good" : "bad") + '">' + lead + "</div>" +
         '<div class="sol-idea"><b>破题关键：</b>' + esc(data.idea) + "</div>" +
+        whyHtml +
         visualHTML(data) +
         '<ol class="sol-steps">' + steps + "</ol>" +
+        repairHtml +
         (data.check ? '<div class="sol-check"><b>' + esc(data.check) + "</div>" : "") +
         chapterLink +
       "</div>";
     panel.classList.add("has-sol");
     mountVisual(panel, data);
+  }
+
+  // 没有精讲数据的题：给一个通用的错题复盘框架，逼学习者定位断点
+  function reflect(q) {
+    return '<b>错题复盘三问</b>' +
+      '<ol>' +
+        '<li>题干里哪个条件还没用上？把它圈出来。</li>' +
+        '<li>你选的方法依赖什么前提？这个前提在本题满足吗？</li>' +
+        '<li>正确解法的第一步为什么合法？换一个条件还成立吗？</li>' +
+      '</ol>' +
+      '<a href="chapter.html?ch=' + esc(q.chapterId || "") + '">回本章「底层逻辑」</a> · ' +
+      '<a href="proof.html">看可视化证明</a>';
   }
 
   function hide(panel) {
@@ -290,5 +318,5 @@
     panel.innerHTML = "";
   }
 
-  window.SolutionCoach = { has: has, show: show, hide: hide };
+  window.SolutionCoach = { has: has, show: show, hide: hide, reflect: reflect };
 })();

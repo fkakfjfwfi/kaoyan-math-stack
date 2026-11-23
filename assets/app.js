@@ -200,6 +200,7 @@
       '</div>' +
       '<div class="q-exp"><b>解析：</b>' + escapeHTML(q.exp) + '</div>' +
       '<div class="q-sol"></div>' +
+      '<div class="q-reflect"></div>' +
       '<button class="q-fav" type="button" title="收藏这道题">☆</button>';
     return card;
   }
@@ -337,6 +338,7 @@
       var retryBtn = $(".q-retry", card);
       var favBtn = $(".q-fav", card);
       var solPanel = $(".q-sol", card);
+      var reflectPanel = $(".q-reflect", card);
       var hasSol = !!(solPanel && window.SolutionCoach && window.SolutionCoach.has(q.id));
       var selected = null;
       var lastSelected = null;
@@ -419,6 +421,14 @@
           }
           panel.classList.toggle("show");
           ansBtn.textContent = panel.classList.contains("show") ? "收起解析" : "查看解析";
+          if (!hasSol && reflectPanel && window.SolutionCoach &&
+              lastSelected != null && lastSelected !== q.answer) {
+            if (!reflectPanel.dataset.built) {
+              reflectPanel.innerHTML = window.SolutionCoach.reflect(q);
+              reflectPanel.dataset.built = "1";
+            }
+            reflectPanel.classList.add("show");
+          }
           return;
         }
         if (selected === null) {
@@ -469,7 +479,12 @@
           window.SolutionCoach.show(solPanel, q, selected);
           solPanel.classList.add("show");
           exp.classList.remove("show");
+        } else if (!ok && reflectPanel && window.SolutionCoach) {
+          reflectPanel.innerHTML = window.SolutionCoach.reflect(q);
+          reflectPanel.dataset.built = "1";
+          reflectPanel.classList.add("show");
         }
+        if (ok && reflectPanel) reflectPanel.classList.remove("show");
         ansBtn.textContent = "收起解析";
         lockOptions();
         done = true;
@@ -498,6 +513,11 @@
           }
           if (exp) exp.classList.remove("show");
           if (hasSol && solPanel && window.SolutionCoach) window.SolutionCoach.hide(solPanel);
+          if (reflectPanel) {
+            reflectPanel.classList.remove("show");
+            reflectPanel.removeAttribute("data-built");
+            reflectPanel.innerHTML = "";
+          }
           if (ansBtn) ansBtn.textContent = "提交答案";
           retryBtn.hidden = true;
           if (options.allowRetry) {

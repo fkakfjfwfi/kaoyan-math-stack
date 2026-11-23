@@ -46,6 +46,7 @@
         '<span class="ch-num">例题 ' + (i + 1) + '</span>' +
         '<h3>' + e.title + '</h3>' +
         '<p><b>题目：</b>' + e.question + '</p>' +
+        (e.logic ? '<p class="example-logic"><b>为什么先这样想：</b>' + e.logic + '</p>' : "") +
         '<div class="steps">' + steps + '</div>' +
         '<p class="example-answer"><b>答案：</b>' + e.answer + '</p>' +
       '</div>';
@@ -57,6 +58,25 @@
     }).join("");
 
     var pitfalls = (c.pitfalls || []).map(function (p) { return "<li>" + p + "</li>"; }).join("");
+
+    // 本章底层逻辑：先讲「为什么这样想」，再进入知识点
+    var logic = (window.MATH_REASONING || {})[c.id];
+    var logicHtml = logic
+      ? '<h2 class="sec" id="logic">底层逻辑 <span class="en">WHY THIS WAY</span></h2>' +
+        '<div class="logic-card">' +
+          '<div class="logic-core">' + logic.core + '</div>' +
+          '<p class="logic-why">' + logic.why + '</p>' +
+          '<div class="logic-signals">' + (logic.signals || []).map(function (s) {
+            return '<div class="logic-signal">' +
+              '<span class="cue">' + s.cue + '</span><span class="arrow">→</span><span class="move">' + s.move + '</span>' +
+              '<p>' + s.why + '</p>' +
+            '</div>';
+          }).join("") + '</div>' +
+          '<div class="logic-wrong"><b>最容易错的直觉：</b>' + logic.wrong + '</div>' +
+          '<div class="logic-bridge"><b>往后接：</b>' + logic.bridge + '</div>' +
+          '<div class="logic-drill"><b>先自问：</b>' + logic.drill + '</div>' +
+        '</div>'
+      : "";
 
     // 本章对应的可视化证明（proof-data.js 提供）
     var proofs = (window.MATH_PROOFS || []).filter(function (p) { return p.chapter === c.id; });
@@ -93,6 +113,7 @@
 
       '<div class="toc">' +
         '<span class="toc-label">本章目录</span>' +
+        '<a href="#logic">底层逻辑</a>' +
         '<a href="#lesson">知识块</a>' +
         (proofs.length ? '<a href="#proofs">可视化证明</a>' : '') +
         '<a href="#examples">典型例题</a>' +
@@ -105,6 +126,7 @@
         '<div class="co-title">📌 先建立主线</div>' +
         '<p style="margin-bottom:0">本章平均约 <b>' + c.score + ' 分</b>，重要度 ' + "★".repeat(c.stars) + '。先读人话导入和知识块，再动手做例题；不要直接跳到章末题。</p>' +
       '</div>' +
+      logicHtml +
 
       '<h2 class="sec" id="lesson">本章讲解 <span class="en">LESSON</span></h2>' +
       blocks +
