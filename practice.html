@@ -32,12 +32,24 @@
     <p class="eyebrow">PRACTICE · 60 题</p>
     <h1>练习场：<span class="em">按卷刷，不按心情刷</span></h1>
     <p class="lede">先用 20 题诊断看清自己离 60 分有多远，再用四套卷逐层推进。题库与章节页共用，答错的题自动进错题本；收藏、只看错题、随机 10 题都在 HUD 里。</p>
-    <p class="tagline">60 题题库 · 20 题诊断 · 四套组卷 · 错题本 · 收藏</p>
+    <p class="tagline">60 题题库 · 20 题诊断 · 全真模拟 · 四套组卷 · 错题复习</p>
   </header>
 
   <div class="callout exam">
     <div class="co-title">📌 怎么用最有效</div>
     <p style="margin-bottom:0">先做 20 题诊断 → 按弱项回模块页补例题 → 做「基础卷」巩固 → 二轮做「提高卷 + 真题改编卷」→ 考前用「全真模拟卷」限时。错题不要只看答案，回到对应章节把概念/公式重写一遍。</p>
+  </div>
+
+  <div class="review-card" id="reviewCard">
+    <div>
+      <div class="diag-kicker">SPACED REVIEW</div>
+      <h2>今日复习</h2>
+      <p>错题按排程回来：答错 1 天后到期，第一次答对后 3 天再复习，连续答对后移出。当前 <b id="reviewCount">0</b> 题到期。</p>
+    </div>
+    <div class="review-actions">
+      <button class="btn sm" id="startReview" type="button">复习到期错题</button>
+      <button class="btn ghost sm" id="exitReview" type="button" hidden>退出复习</button>
+    </div>
   </div>
 
   <section class="diagnostic" id="diagnostic">
@@ -50,6 +62,12 @@
     </div>
     <div id="diagnosticResult" aria-live="polite" hidden></div>
   </section>
+
+  <div class="callout exam">
+    <div class="co-title">⏱ 全真模拟 · 150 分 / 180 分钟</div>
+    <p>10 道单选 50 分 + 6 道填空 30 分 + 6 道解答 70 分，严格计时。选择/填空自动判分，解答题对答案后按步骤自评。建议基础线达标后每周一套。</p>
+    <p style="margin-bottom:0"><a class="btn sm" href="mock.html">进入全真模拟 →</a></p>
+  </div>
 
   <h2 class="sec" id="paperTitle">选择试卷 <span class="en">PAPERS</span></h2>
   <div class="paper-grid" id="paperGrid">

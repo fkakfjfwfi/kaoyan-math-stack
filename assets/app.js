@@ -71,6 +71,10 @@
   $$(".nav-links a").forEach(function (a) {
     if (a.getAttribute("href") === path) a.classList.add("active");
   });
+  if (path === "mock.html") {
+    var mockEntry = $('.nav-links a[href="practice.html"]');
+    if (mockEntry) mockEntry.classList.add("active");
+  }
 
   /* ── 打卡清单 ── */
   var CK_KEY = "yanshu.checklist.v2";
@@ -139,6 +143,19 @@
   var LEVEL_LABEL = { basic: "基础", mid: "提高", real: "真题改编" };
   var SUBJECT_LABEL = { 高数: "高等数学", 线代: "线性代数", 概率: "概率统计" };
 
+  // 兼容旧记录：曾经答错的题，立即进入复习队列
+  function migrateQStats() {
+    var changed = false;
+    Object.keys(qstats).forEach(function (id) {
+      var r = qstats[id];
+      if (r && typeof r === "object" && r.r === 0 && !r.dueAt) {
+        r.dueAt = Date.now();
+        changed = true;
+      }
+    });
+    if (changed) persistQS();
+  }
+
   // 20 题诊断：12 高数 + 4 线代 + 4 概率，每题 5 分，60 分达标
   var DIAGNOSTIC_IDS = [
     "g1-1", "g1-2", "g2-1", "g2-2", "g3-1", "g3-3",
@@ -177,6 +194,7 @@
       '<div class="opts">' + options + '</div>' +
       '<div class="q-foot">' +
         '<button class="btn-ans" type="button">提交答案</button>' +
+        '<button class="btn-ans q-retry" type="button" hidden>重做本题</button>' +
         '<span class="q-res"></span>' +
       '</div>' +
       '<div class="q-exp"><b>解析：</b>' + escapeHTML(q.exp) + '</div>' +
@@ -228,10 +246,15 @@
 
     var mode = "all";
     var msgTimer = null;
+    var sessionResults = {};
 
     function recOf(q) {
       var r = records[q.id];
       return r && typeof r === "object" ? r : null;
+    }
+
+    function resultOf(q) {
+      return options.allowRetry ? (sessionResults[q.id] || null) : recOf(q);
     }
 
     function announce(message, bad) {
@@ -250,7 +273,7 @@
       var wrong = 0;
       var fav = 0;
       questions.forEach(function (q) {
-        var r = recOf(q);
+        var r = resultOf(q);
         if (r && (r.r === 0 || r.r === 1)) {
           answered += 1;
           if (r.r === 1) correct += 1;
@@ -277,7 +300,7 @@
       mode = next;
       var show = cards.slice();
       if (mode === "wrong") {
-        show = cards.filter(function (c) { var r = recOf(c.q); return r && r.r === 0; });
+        show = cards.filter(function (c) { var r = resultOf(c.q); return r && r.r === 0; });
       } else if (mode === "fav") {
         show = cards.filter(function (c) { return !!favs[c.q.id]; });
       } else if (mode === "random") {
@@ -309,6 +332,7 @@
       var res = $(".q-res", card);
       var exp = $(".q-exp", card);
       var ansBtn = $(".btn-ans", card);
+      var retryBtn = $(".q-retry", card);
       var favBtn = $(".q-fav", card);
       var selected = null;
       var done = false;
@@ -339,12 +363,13 @@
           }
         }
         if (ansBtn) ansBtn.textContent = "查看解析";
+        if (retryBtn) retryBtn.hidden = false;
         lockOptions();
         done = true;
       }
 
       var record = recOf(q);
-      if (record && (record.r === 0 || record.r === 1)) {
+      if (!options.allowRetry && record && (record.r === 0 || record.r === 1)) {
         showAnswer(record);
       }
 
@@ -390,8 +415,35 @@
           return;
         }
         var ok = selected === q.answer;
-        records[q.id] = { r: ok ? 1 : 0, d: selected };
-        if (persistRecords) persistQS();
+        var now = Date.now();
+        var prev = records[q.id] || {};
+        var rec = { r: ok ? 1 : 0, d: selected, lastAt: now };
+        if (ok) {
+          rec.wrongCount = prev.wrongCount || 0;
+          if (prev.wrongCount) {
+            // 第一次复习答对：3 天后再来；连续答对：移出复习队列
+            if (prev.dueAt && (prev.round || 0) >= 1) {
+              rec.dueAt = null;
+              rec.round = 2;
+            } else {
+              rec.dueAt = now + 3 * 86400000;
+              rec.round = 1;
+            }
+          } else {
+            rec.dueAt = null;
+            rec.round = 0;
+          }
+        } else {
+          rec.wrongCount = (prev.wrongCount || 0) + 1;
+          rec.dueAt = now + 86400000;
+          rec.round = 0;
+        }
+        records[q.id] = rec;
+        sessionResults[q.id] = rec;
+        if (persistRecords) {
+          persistQS();
+          document.dispatchEvent(new CustomEvent("qstatschange"));
+        }
         opts.forEach(function (o) {
           var value = Number(o.getAttribute("data-opt"));
           o.classList.toggle("right", value === q.answer);
@@ -405,14 +457,37 @@
         ansBtn.textContent = "收起解析";
         lockOptions();
         done = true;
+        if (retryBtn) retryBtn.hidden = ok;
         refreshHud();
         if (typeof options.onChange === "function") options.onChange(records, questions);
         if (persistRecords) {
-          announce(ok ? "已保存 ✓" : "已保存 ✓ 并收入错题本，可点「只看错题」重做");
+          announce(ok ? "已保存 ✓" : "已保存 ✓ 已加入复习队列，1 天后到期");
         } else {
           announce(ok ? "已记录 ✓" : "已记录 ✓ 答错，提交诊断后查看弱项");
         }
       });
+
+      if (retryBtn) {
+        retryBtn.addEventListener("click", function () {
+          selected = null;
+          done = false;
+          opts.forEach(function (o) {
+            o.disabled = false;
+            o.classList.remove("sel", "right", "wrong");
+          });
+          if (res) {
+            res.textContent = "重新作答：选一个答案";
+            res.className = "q-res";
+          }
+          if (exp) exp.classList.remove("show");
+          if (ansBtn) ansBtn.textContent = "提交答案";
+          retryBtn.hidden = true;
+          if (options.allowRetry) {
+            delete sessionResults[q.id];
+            refreshHud();
+          }
+        });
+      }
     });
 
     hud.addEventListener("click", function (ev) {
@@ -421,8 +496,16 @@
       var m = btn.getAttribute("data-hud");
       if (m === "reset") {
         if (!confirm("确定清空当前这一组题的答题进度？收藏不受影响。")) return;
+        if (options.allowRetry) {
+          sessionResults = {};
+          mountQuiz(container, questions, options);
+          return;
+        }
         questions.forEach(function (q) { delete records[q.id]; });
-        if (persistRecords) persistQS();
+        if (persistRecords) {
+          persistQS();
+          document.dispatchEvent(new CustomEvent("qstatschange"));
+        }
         mountQuiz(container, questions, options);
         return;
       }
@@ -503,6 +586,10 @@
     var diagBox = document.getElementById("diagnostic");
     var diagResult = document.getElementById("diagnosticResult");
     var diagState = { active: false, submitted: false, questions: [], records: {} };
+    var reviewCard = document.getElementById("reviewCard");
+    var reviewCount = document.getElementById("reviewCount");
+    var startReviewBtn = document.getElementById("startReview");
+    var exitReviewBtn = document.getElementById("exitReview");
 
     function updateBankMsg(text) {
       var msg = document.getElementById("bankMsg");
@@ -515,13 +602,64 @@
       var meta = PAPERS[state.paper];
       var subjectText = state.subject === "全部" ? "三科混合" : (SUBJECT_LABEL[state.subject] || state.subject);
       updateBankMsg(meta.title + " · " + subjectText + " · 共 " + current.length + " 题 · 建议 " + meta.minutes + " 分钟");
+      refreshReview();
+    }
+
+    function setPaperVisible(on) {
+      if (grid) grid.style.display = on ? "" : "none";
+      if (filter) filter.style.display = on ? "" : "none";
+      if (paperTitle) paperTitle.style.display = on ? "" : "none";
     }
 
     function setDiagMode(on) {
-      if (grid) grid.style.display = on ? "none" : "";
-      if (filter) filter.style.display = on ? "none" : "";
-      if (paperTitle) paperTitle.style.display = on ? "none" : "";
+      setPaperVisible(!on);
       if (diagBox) diagBox.classList.toggle("is-active", on);
+    }
+
+    // 到期错题：答错 1 天后到期；复习答对后 3 天再到期；连续答对后移出
+    function dueQuestions() {
+      var bank = window.MATH_BANK || [];
+      var now = Date.now();
+      return bank.filter(function (q) {
+        var r = qstats[q.id];
+        return r && r.dueAt && r.dueAt <= now;
+      });
+    }
+
+    function refreshReview() {
+      if (!reviewCount) return;
+      var due = dueQuestions();
+      reviewCount.textContent = String(due.length);
+      if (reviewCard) reviewCard.classList.toggle("has-due", due.length > 0);
+    }
+
+    function startReview() {
+      var due = dueQuestions();
+      if (!due.length) {
+        updateBankMsg("今日没有到期错题；先去做新题，或明天再来复习");
+        if (reviewCard) {
+          reviewCard.classList.add("empty-flash");
+          setTimeout(function () { reviewCard.classList.remove("empty-flash"); }, 1200);
+        }
+        return;
+      }
+      if (diagState.active) {
+        diagState.active = false;
+        if (diagResult) { diagResult.hidden = true; diagResult.innerHTML = ""; }
+        if (diagBox) diagBox.classList.remove("is-active");
+      }
+      setPaperVisible(false);
+      if (exitReviewBtn) exitReviewBtn.hidden = false;
+      mountQuiz(target, due, { allowRetry: true, onChange: refreshReview });
+      updateBankMsg("今日复习 · " + due.length + " 题到期");
+      var anchor = document.getElementById("bankAnchor");
+      if (anchor) anchor.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+
+    function exitReview() {
+      if (exitReviewBtn) exitReviewBtn.hidden = true;
+      setPaperVisible(true);
+      mountCurrent();
     }
 
     function setDiagLive(records) {
@@ -557,6 +695,7 @@
       diagState.active = true;
       diagState.submitted = false;
       setDiagMode(true);
+      if (exitReviewBtn) exitReviewBtn.hidden = true;
       if (diagResult) {
         diagResult.hidden = false;
         diagResult.innerHTML =
@@ -668,6 +807,7 @@
         diagResult.innerHTML = "";
       }
       setDiagMode(false);
+      if (exitReviewBtn) exitReviewBtn.hidden = true;
       mountCurrent();
     }
 
@@ -693,8 +833,12 @@
 
     var startBtn = document.getElementById("startDiagnostic");
     if (startBtn) startBtn.addEventListener("click", startDiagnostic);
+    if (startReviewBtn) startReviewBtn.addEventListener("click", startReview);
+    if (exitReviewBtn) exitReviewBtn.addEventListener("click", exitReview);
+    document.addEventListener("qstatschange", refreshReview);
 
     mountCurrent();
+    refreshReview();
     if (location.hash === "#diagnostic") startDiagnostic();
   }
 
@@ -806,6 +950,7 @@
 
   /* ── 启动 ── */
   function init() {
+    migrateQStats();
     refreshChecklist();
     initCountdown();
     initChapterQuizzes();
