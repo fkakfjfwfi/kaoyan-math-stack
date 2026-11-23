@@ -188,6 +188,7 @@
         '<div class="q-tag">' +
           '<span class="q-lvl ' + q.level + '">' + level + '</span>' +
           '<span>' + escapeHTML(SUBJECT_LABEL[q.subject] || q.subject) + ' · ' + escapeHTML(q.chapter) + '</span>' +
+          (q.source ? '<span class="chip chip-soft">' + escapeHTML(q.source) + '</span>' : '') +
         '</div>' +
         '<div class="q-title"><b>' + (index + 1) + ".</b> " + escapeHTML(q.q) + '</div>' +
       '</div>' +
@@ -536,7 +537,8 @@
     basic: { title: "基础卷", count: 12, minutes: 25, levels: ["basic"], desc: "概念与基本计算，学完一章就来做。" },
     mid: { title: "提高卷", count: 12, minutes: 30, levels: ["mid"], desc: "辨析与综合计算，二轮复习用。" },
     real: { title: "真题改编卷", count: 10, minutes: 35, levels: ["real", "mid"], desc: "按真题题型改编，覆盖高频考点。" },
-    mock: { title: "全真模拟卷", count: 16, minutes: 45, levels: ["basic", "mid", "real"], desc: "三科混合，模拟考场节奏。" }
+    mock: { title: "全真模拟卷", count: 16, minutes: 45, levels: ["basic", "mid", "real"], desc: "三科混合，模拟考场节奏。" },
+    external: { title: "收录试跑卷", count: 20, minutes: 30, levels: ["basic", "mid", "real"], desc: "大观园收录 16 题 + 本站补充 4 题，用于验证格式与难度。" }
   };
 
   function shuffle(arr) {
@@ -551,6 +553,13 @@
   function buildPaper(kind, subject) {
     var bank = window.MATH_BANK || [];
     var meta = PAPERS[kind] || PAPERS.basic;
+    if (kind === "external") {
+      var ext = bank.filter(function (q) { return q.id.indexOf("ext-") === 0; });
+      if (subject && subject !== "全部") {
+        ext = ext.filter(function (q) { return q.subject === subject; });
+      }
+      return ext.slice(0, meta.count);
+    }
     var pool = bank.filter(function (q) { return meta.levels.indexOf(q.level) !== -1; });
     if (kind === "real") {
       var real = bank.filter(function (q) { return q.level === "real"; });

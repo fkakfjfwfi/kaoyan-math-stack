@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>练习场 · 60 题跨章组卷与 20 题诊断 | 研数</title>
-<meta name="description" content="考研数学一练习场：20 题零基础诊断、基础卷、提高卷、真题改编卷、全真模拟卷；60 题题库，自动错题本、收藏、随机 10 题。">
+<title>练习场 · 80 题跨章组卷与 20 题诊断 | 研数</title>
+<meta name="description" content="考研数学一练习场：20 题零基础诊断、基础卷、提高卷、真题改编卷、全真模拟卷；80 题题库（含 20 题外部题库试跑），自动错题本、收藏、随机 10 题。">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%231b2430'/%3E%3Ctext x='50' y='71' font-size='60' text-anchor='middle' fill='%23f6f3ec' font-family='Georgia'%3E%E2%88%91%3C/text%3E%3C/svg%3E">
 <link rel="stylesheet" href="assets/style.css">
 <script>try{var t=JSON.parse(localStorage.getItem("yanshu.theme")||"null");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}</script>
@@ -29,10 +29,10 @@
 
 <div class="wrap">
   <header class="hero">
-    <p class="eyebrow">PRACTICE · 60 题</p>
+    <p class="eyebrow">PRACTICE · 80 题</p>
     <h1>练习场：<span class="em">按卷刷，不按心情刷</span></h1>
-    <p class="lede">先用 20 题诊断看清自己离 60 分有多远，再用四套卷逐层推进。题库与章节页共用，答错的题自动进错题本；收藏、只看错题、随机 10 题都在 HUD 里。</p>
-    <p class="tagline">60 题题库 · 20 题诊断 · 全真模拟 · 四套组卷 · 错题复习</p>
+    <p class="lede">先用 20 题诊断看清自己离 60 分有多远，再用内置四套卷逐层推进。题库与章节页共用，另收录 20 道外部题库试跑题；答错的题自动进错题本。</p>
+    <p class="tagline">80 题题库 · 20 题诊断 · 全真模拟 · 四套内置 + 收录试跑 · 错题复习</p>
   </header>
 
   <div class="callout exam">
@@ -91,6 +91,11 @@
       <span class="pc-desc">三科混合随机抽题，模拟考场节奏。</span>
       <span class="pc-meta">16 题 · 建议 45 分钟</span>
     </button>
+    <button class="paper-card" data-paper="external" type="button">
+      <span class="pc-title">收录试跑卷</span>
+      <span class="pc-desc">大观园收录 16 题 + 本站补充 4 题，验证格式与难度。</span>
+      <span class="pc-meta">20 题 · 建议 30 分钟</span>
+    </button>
   </div>
 
   <div class="filter-bar" id="subjectFilter">
@@ -105,7 +110,7 @@
   <div id="practiceQuiz"></div>
 
   <div class="callout" style="margin-top:26px">
-    <b>说明：</b>答题记录、错题本、收藏与章节页共用同一份 localStorage；换页面不丢，清除浏览器数据会重置。页面不依赖外部 CDN，本地直接双击 HTML 也能做题。<br>
+    <b>说明：</b>答题记录、错题本、收藏与章节页共用同一份 localStorage；换页面不丢，清除浏览器数据会重置。页面不依赖外部 CDN，本地直接双击 HTML 也能做题。标有「大观园」的题目为外部题库试跑，答案与解析已按本站格式重写；「本站补充」为补齐题。<br>
     <span class="muted small">题目为经典题型与真题改编，不冒充原题；解析以考场最快解法为准，不展开教材式推导。</span>
   </div>
 
@@ -124,6 +129,7 @@
 </footer>
 
 <script src="assets/bank.js"></script>
+<script src="assets/bank-external.js"></script>
 <script src="assets/app.js"></script>
 </body>
 </html>
